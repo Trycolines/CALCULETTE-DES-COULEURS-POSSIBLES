@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculette Génétique Ragdoll</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5fa; }
+    h1 { color: #663399; }
+    label { display: block; margin-top: 10px; }
+    select, button { padding: 6px; margin: 4px 0; }
+    .result { margin-top: 20px; padding: 15px; background: #fff; border: 1px solid #ccc; border-radius: 8px; }
+    .highlight { background: #eef; border-left: 5px solid #99f; padding: 5px; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h1>Calculette Génétique du Ragdoll</h1>
+
+  <fieldset>
+    <legend><strong>Père</strong></legend>
+    <label>Couleur :
+      <select id="fatherColor">
+        <option>Seal</option><option>Blue</option><option>Chocolat</option><option>Lilas</option><option>Roux</option><option>Crème</option><option>Tortie</option><option>Fawn</option><option>Cinnamon</option>
+      </select>
+    </label>
+    <label>Porte aussi chocolat : <select id="fatherCarrierChoco"><option>Non</option><option>Oui</option></select></label>
+    <label>Porte aussi dilution : <select id="fatherCarrierDilution"><option>Non</option><option>Oui</option></select></label>
+    <label>Porte aussi cinnamon : <select id="fatherCarrierCinnamon"><option>Non</option><option>Oui</option></select></label>
+    <label>Porte aussi non-tabby : <select id="fatherCarrierNonTabby"><option>Non</option><option>Oui</option></select></label>
+    <label>Motif :
+      <select id="fatherPattern">
+        <option>Colourpoint</option><option>Mitted</option><option>Bicolore</option><option>Van</option>
+      </select>
+    </label>
+    <label>Tabby (lynx) : <select id="fatherTabby"><option>Non Tabby</option><option>Tabby</option></select></label>
+  </fieldset>
+
+  <fieldset>
+    <legend><strong>Mère</strong></legend>
+    <label>Couleur :
+      <select id="motherColor">
+        <option>Seal</option><option>Blue</option><option>Chocolat</option><option>Lilas</option><option>Roux</option><option>Crème</option><option>Tortie</option><option>Fawn</option><option>Cinnamon</option>
+      </select>
+    </label>
+    <label>Porte aussi chocolat : <select id="motherCarrierChoco"><option>Non</option><option>Oui</option></select></label>
+    <label>Porte aussi dilution : <select id="motherCarrierDilution"><option>Non</option><option>Oui</option></select></label>
+    <label>Porte aussi cinnamon : <select id="motherCarrierCinnamon"><option>Non</option><option>Oui</option></select></label>
+    <label>Porte aussi non-tabby : <select id="motherCarrierNonTabby"><option>Non</option><option>Oui</option></select></label>
+    <label>Motif :
+      <select id="motherPattern">
+        <option>Colourpoint</option><option>Mitted</option><option>Bicolore</option><option>Van</option>
+      </select>
+    </label>
+    <label>Tabby (lynx) : <select id="motherTabby"><option>Non Tabby</option><option>Tabby</option></select></label>
+  </fieldset>
+
+  <button onclick="predictGenetics()">Prédire</button>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function predictGenetics() {
+      const fc = document.getElementById('fatherColor').value;
+      const mc = document.getElementById('motherColor').value;
+      const fcar = [
+        document.getElementById('fatherCarrierChoco').value === "Oui",
+        document.getElementById('fatherCarrierDilution').value === "Oui",
+        document.getElementById('fatherCarrierCinnamon').value === "Oui"
+      ];
+      const mcar = [
+        document.getElementById('motherCarrierChoco').value === "Oui",
+        document.getElementById('motherCarrierDilution').value === "Oui",
+        document.getElementById('motherCarrierCinnamon').value === "Oui"
+      ];
+      const fcTabby = document.getElementById('fatherTabby').value === "Tabby";
+      const mcTabby = document.getElementById('motherTabby').value === "Tabby";
+      const fcNonTabby = document.getElementById('fatherCarrierNonTabby').value === "Oui";
+      const mcNonTabby = document.getElementById('motherCarrierNonTabby').value === "Oui";
+      const fp = document.getElementById('fatherPattern').value;
+      const mp = document.getElementById('motherPattern').value;
+
+      function is(val, list) {
+        return list.includes(val);
+      }
+
+      const fDiluted = is(fc, ["Blue", "Lilas", "Fawn", "Crème"]);
+      const mDiluted = is(mc, ["Blue", "Lilas", "Fawn", "Crème"]);
+      const fCinnamon = is(fc, ["Cinnamon", "Fawn"]);
+      const mCinnamon = is(mc, ["Cinnamon", "Fawn"]);
+      const fChoco = is(fc, ["Chocolat", "Lilas", "Fawn"]);
+      const mChoco = is(mc, ["Chocolat", "Lilas", "Fawn"]);
+
+      let baseColors = new Set();
+      const carriesChoco = fcar[0] || mcar[0] || fChoco || mChoco;
+      const carriesCinnamon = fcar[2] || mcar[2] || fCinnamon || mCinnamon;
+      const carriesDilution = fcar[1] || mcar[1] || fDiluted || mDiluted;
+
+      if (carriesCinnamon && carriesDilution) baseColors.add("Fawn");
+      if (carriesCinnamon) baseColors.add("Cinnamon");
+      if (carriesChoco && carriesDilution) baseColors.add("Lilas");
+      if (carriesChoco) baseColors.add("Chocolat");
+      if (carriesDilution) baseColors.add("Blue");
+      baseColors.add("Seal");
+
+      if (fc === "Roux" || mc === "Roux" || fc === "Crème" || mc === "Crème") {
+        baseColors.add("Roux");
+        baseColors.add("Crème");
+      }
+
+      if (fc === "Tortie" || mc === "Tortie" || fc === "Crème" || mc === "Crème" || fc === "Roux" || mc === "Roux") {
+        baseColors.add("Tortie Seal");
+        baseColors.add("Tortie Blue");
+        if (carriesChoco) baseColors.add("Tortie Chocolat");
+        if (carriesChoco && carriesDilution) baseColors.add("Tortie Lilas");
+        if (carriesCinnamon) baseColors.add("Tortie Cinnamon");
+        if (carriesCinnamon && carriesDilution) baseColors.add("Tortie Fawn");
+      }
+
+      let result = "<div class='highlight'><strong>Couleurs possibles :</strong> ";
+      result += Array.from(baseColors).join(", ");
+      result += "</div>";
+
+      let ported = new Set();
+      if (["Chocolat", "Lilas", "Fawn"].includes(fc) || ["Chocolat", "Lilas", "Fawn"].includes(mc) || (fcar[0] && mcar[0])) ported.add("Chocolat");
+      if (["Cinnamon", "Fawn"].includes(fc) || ["Cinnamon", "Fawn"].includes(mc) || (fcar[2] && mcar[2])) ported.add("Cinnamon");
+      if (["Blue", "Lilas", "Crème", "Fawn"].includes(fc) || ["Blue", "Lilas", "Crème", "Fawn"].includes(mc) || (fcar[1] && mcar[1])) ported.add("Dilution");
+      result += "<div class='highlight'><strong>Gènes portés :</strong> ";
+      result += ported.size ? [...ported].join(", ") : "Aucun";
+      result += "</div>";
+
+      result += "<div class='highlight'><strong>Motifs possibles :</strong> ";
+      result += (fp === "Mitted" && mp === "Mitted") ? "25% Colourpoint, 50% Mitted, 25% Bicolore" : (fp === mp ? fp : "Bicolore");
+      result += "</div>";
+
+      result += "<div class='highlight'><strong>Tabby :</strong> ";
+      if (fcTabby && mcTabby) result += "100% Tabby";
+      else if (fcTabby || mcTabby) result += "50% Tabby, 50% non-tabby";
+      else result += "100% non-tabby";
+      result += "</div>";
+
+      document.getElementById("result").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
