@@ -19,7 +19,7 @@
     <legend><strong>Père</strong></legend>
     <label>Couleur :
       <select id="fatherColor">
-        <option>Seal</option><option>Blue</option><option>Chocolat</option><option>Lilas</option><option>Roux</option><option>Crème</option><option>Tortie</option><option>Fawn</option><option>Cinnamon</option>
+        <option>Seal</option><option>Blue</option><option>Chocolat</option><option>Lilas</option><option>Roux</option><option>Crème</option><option>Fawn</option><option>Cinnamon</option>
       </select>
     </label>
     <label>Porte aussi chocolat : <select id="fatherCarrierChoco"><option>Non</option><option>Oui</option></select></label>
@@ -28,7 +28,12 @@
     <label>Porte aussi non-tabby : <select id="fatherCarrierNonTabby"><option>Non</option><option>Oui</option></select></label>
     <label>Motif :
       <select id="fatherPattern">
-        <option>Colourpoint</option><option>Mitted</option><option>Bicolore</option><option>Van</option>
+        <option>Colourpoint</option>
+        <option>Mitted</option>
+        <option>Bicolore Vrai</option>
+        <option>Bicolore HM</option>
+        <option>Bicolore MW</option>
+        <option>Van</option>
       </select>
     </label>
     <label>Tabby (lynx) : <select id="fatherTabby"><option>Non Tabby</option><option>Tabby</option></select></label>
@@ -38,8 +43,21 @@
     <legend><strong>Mère</strong></legend>
     <label>Couleur :
       <select id="motherColor">
-        <option>Seal</option><option>Blue</option><option>Chocolat</option><option>Lilas</option><option>Roux</option><option>Crème</option><option>Tortie</option><option>Fawn</option><option>Cinnamon</option>
-      </select>
+  <option>Seal</option>
+  <option>Blue</option>
+  <option>Chocolat</option>
+  <option>Lilas</option>
+  <option>Roux</option>
+  <option>Crème</option>
+  <option>Tortie Seal</option>
+  <option>Tortie Blue</option>
+  <option>Tortie Chocolat</option>
+  <option>Tortie Lilas</option>
+  <option>Tortie Cinnamon</option>
+  <option>Tortie Fawn</option>
+  <option>Fawn</option>
+  <option>Cinnamon</option>
+</select>
     </label>
     <label>Porte aussi chocolat : <select id="motherCarrierChoco"><option>Non</option><option>Oui</option></select></label>
     <label>Porte aussi dilution : <select id="motherCarrierDilution"><option>Non</option><option>Oui</option></select></label>
@@ -47,7 +65,12 @@
     <label>Porte aussi non-tabby : <select id="motherCarrierNonTabby"><option>Non</option><option>Oui</option></select></label>
     <label>Motif :
       <select id="motherPattern">
-        <option>Colourpoint</option><option>Mitted</option><option>Bicolore</option><option>Van</option>
+        <option>Colourpoint</option>
+        <option>Mitted</option>
+        <option>Bicolore Vrai</option>
+        <option>Bicolore HM</option>
+        <option>Bicolore MW</option>
+        <option>Van</option>
       </select>
     </label>
     <label>Tabby (lynx) : <select id="motherTabby"><option>Non Tabby</option><option>Tabby</option></select></label>
@@ -90,16 +113,43 @@
       const mChoco = is(mc, ["Chocolat", "Lilas", "Fawn"]);
 
       let baseColors = new Set();
-      const carriesChoco = fcar[0] || mcar[0] || fChoco || mChoco;
-      const carriesCinnamon = fcar[2] || mcar[2] || fCinnamon || mCinnamon;
-      const carriesDilution = fcar[1] || mcar[1] || fDiluted || mDiluted;
+      const kittenSex = document.getElementById('kittenSex') ? document.getElementById('kittenSex').value : "Femelle";
+      const fatherColors = [fc];
+      const motherColors = [mc];
 
-      if (carriesCinnamon && carriesDilution) baseColors.add("Fawn");
-      if (carriesCinnamon) baseColors.add("Cinnamon");
-      if (carriesChoco && carriesDilution) baseColors.add("Lilas");
-      if (carriesChoco) baseColors.add("Chocolat");
-      if (carriesDilution) baseColors.add("Blue");
-      baseColors.add("Seal");
+      // Couleurs exprimées uniquement si les deux parents le permettent
+      const expresses = new Set();
+      const carried = new Set();
+
+      const isCarrying = (gene, parentColor, isCarrier) => {
+        const geneMap = {
+          "Chocolat": ["Chocolat", "Lilas", "Fawn"],
+          "Cinnamon": ["Cinnamon", "Fawn"],
+          "Dilution": ["Blue", "Lilas", "Fawn", "Crème"]
+        };
+        return geneMap[gene].includes(parentColor) || isCarrier;
+      };
+
+      const genes = ["Chocolat", "Cinnamon", "Dilution"];
+
+      genes.forEach(gene => {
+        const fatherCarries = isCarrying(gene, fc, fcar[genes.indexOf(gene)]);
+        const motherCarries = isCarrying(gene, mc, mcar[genes.indexOf(gene)]);
+
+        if (fatherCarries && motherCarries) {
+          // Gène exprimable
+          if (gene === "Chocolat") expresses.add("Chocolat");
+          if (gene === "Dilution") expresses.add("Blue");
+          if (gene === "Cinnamon") expresses.add("Cinnamon");
+          if (gene === "Chocolat" && isCarrying("Dilution", fc, fcar[1]) && isCarrying("Dilution", mc, mcar[1])) expresses.add("Lilas");
+          if (gene === "Cinnamon" && isCarrying("Dilution", fc, fcar[1]) && isCarrying("Dilution", mc, mcar[1])) expresses.add("Fawn");
+        }
+
+        if (fatherCarries || motherCarries) carried.add(gene);
+      });
+
+      expresses.add("Seal");
+      baseColors = expresses;
 
       if (fc === "Roux" || mc === "Roux" || fc === "Crème" || mc === "Crème") {
         baseColors.add("Roux");
@@ -120,15 +170,23 @@
       result += "</div>";
 
       let ported = new Set();
-      if (["Chocolat", "Lilas", "Fawn"].includes(fc) || ["Chocolat", "Lilas", "Fawn"].includes(mc) || (fcar[0] && mcar[0])) ported.add("Chocolat");
-      if (["Cinnamon", "Fawn"].includes(fc) || ["Cinnamon", "Fawn"].includes(mc) || (fcar[2] && mcar[2])) ported.add("Cinnamon");
-      if (["Blue", "Lilas", "Crème", "Fawn"].includes(fc) || ["Blue", "Lilas", "Crème", "Fawn"].includes(mc) || (fcar[1] && mcar[1])) ported.add("Dilution");
-      result += "<div class='highlight'><strong>Gènes portés :</strong> ";
-      result += ported.size ? [...ported].join(", ") : "Aucun";
-      result += "</div>";
+      if (["Chocolat", "Lilas", "Fawn"].includes(fc) || fcar[0]) ported.add("Chocolat");
+      if (["Chocolat", "Lilas", "Fawn"].includes(mc) || mcar[0]) ported.add("Chocolat");
+      if (["Cinnamon", "Fawn"].includes(fc) || fcar[2]) ported.add("Cinnamon");
+      if (["Cinnamon", "Fawn"].includes(mc) || mcar[2]) ported.add("Cinnamon");
+      if (["Blue", "Lilas", "Crème", "Fawn"].includes(fc) || fcar[1]) ported.add("Dilution");
+      if (["Blue", "Lilas", "Crème", "Fawn"].includes(mc) || mcar[1]) ported.add("Dilution");
 
       result += "<div class='highlight'><strong>Motifs possibles :</strong> ";
-      result += (fp === "Mitted" && mp === "Mitted") ? "25% Colourpoint, 50% Mitted, 25% Bicolore" : (fp === mp ? fp : "Bicolore");
+      if ((fp === "Mitted" && mp === "Mitted")) {
+        result += "25% Colourpoint, 50% Mitted, 25% Bicolore";
+      } else if ((fp === "Mitted" && mp === "Colourpoint") || (fp === "Colourpoint" && mp === "Mitted")) {
+        result += "50% Colourpoint, 50% Mitted";
+      } else if (fp === mp) {
+        result += fp;
+      } else {
+        result += "Bicolore";
+      }
       result += "</div>";
 
       result += "<div class='highlight'><strong>Tabby :</strong> ";
@@ -137,6 +195,18 @@
       else result += "100% non-tabby";
       result += "</div>";
 
+      result += "<div class='highlight'><em>NB : Les couleurs Roux, Crème et Tortie dépendent du sexe des chatons.</em></div>";
+      result = `
+        <div class='highlight'><strong>Couleurs possibles :</strong> ${Array.from(baseColors).join(", ")}</div>
+        <div class='highlight'><strong>Gènes portés :</strong> ${ported.size ? [...ported].join(", ") : "Aucun"}</div>
+        <div class='highlight'><strong>Motifs possibles :</strong> ${
+  (fp === "Mitted" && mp === "Mitted") ? "25% Colourpoint, 50% Mitted, 25% Bicolore" :
+  (fp === "Mitted" && mp === "Colourpoint") || (fp === "Colourpoint" && mp === "Mitted") ? "50% Colourpoint, 50% Mitted" :
+  (fp === "Mitted" && mp === "Bicolore") || (fp === "Bicolore" && mp === "Mitted") ? "50% Mitted, 50% Bicolore" :
+  (fp === mp ? fp : "Bicolore")
+}</div>
+        <div class='highlight'><strong>Tabby :</strong> ${fcTabby && mcTabby ? "100% Tabby" : (fcTabby || mcTabby) ? "50% Tabby, 50% non-tabby" : "100% non-tabby"}</div>
+        <div class='highlight'><em>NB : Les couleurs Roux, Crème et Tortie dépendent du sexe des chatons.</em></div>`;
       document.getElementById("result").innerHTML = result;
     }
   </script>
