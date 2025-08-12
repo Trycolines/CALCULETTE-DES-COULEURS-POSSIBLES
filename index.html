@@ -9,11 +9,11 @@
 
 <style>
   :root{
-    --page-bg:#ffffff;      /* fond page */
+    --page-bg:#ffffff;
     --frame-bg:#FAF3F7;     /* fond du cadre englobant (rosé très doux) */
     --frame-border:#D6B3E0; /* lilac pastel pour la bordure du cadre */
-    --panel:#ffffff;        /* cartes internes (panneaux) */
-    --border:#e9defc;       /* lilac clair pour petites bordures internes */
+    --panel:#ffffff;
+    --border:#e9defc;       /* lilac clair interne */
     --accent:#6b4ea3;       /* lilac soutenu */
     --accent-2:#d37fb2;     /* rose accent */
     --ink:#26233a;
@@ -21,11 +21,10 @@
     --ok:#167f5d; --warn:#a56a00; --err:#7a2a2a;
   }
 
-  /* Base */
   html,body{margin:0;padding:0;background:var(--page-bg);color:var(--ink)}
   body{font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; line-height:1.65}
 
-  /* Cadre englobant TOUT (large + aéré) */
+  /* Cadre englobant TOUT */
   .frame{
     max-width:1024px;
     margin:24px auto;
@@ -34,7 +33,6 @@
     border-radius:16px;
     padding:22px;
   }
-
   .wrap{max-width:980px;margin:0 auto}
 
   h1{font-family:"Dancing Script",cursive; font-size:2.4rem; margin:0 0 8px; color:var(--accent)}
@@ -70,20 +68,18 @@
     padding:12px;
     background:#fff;
   }
-  .gene .gene-title{
-    font-weight:600; margin-bottom:8px; color:#5f4799; font-size:0.98rem
-  }
+  .gene .gene-title{font-weight:600; margin-bottom:8px; color:#5f4799; font-size:0.98rem}
 
   /* Actions */
   .actions{display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 4px}
   .btn{border:1px solid var(--accent); background:var(--accent); color:#fff; padding:10px 14px; border-radius:12px; cursor:pointer}
-  .btn.secondary{background:#fff; color:var(--accent)}
+  .btn.secondary{background:#fff; color:#7a5ab0}
   .btn.ghost{background:#fff; color:#5a3b47; border-color:#eec6dc}
 
   /* Résultats */
   .out{background:#fff; border:1px solid var(--border); border-radius:18px; padding:18px; margin:16px 0}
   .section{margin:10px 0 14px}
-  .section h3{font-family:"Dancing Script",cursive; font-size:1.4rem; color:var(--accent); margin:6px 0}
+  .section h3{font-family:"Dancing Script",cursive; font-size:1.4rem; color:#7a5ab0; margin:6px 0}
   .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
   .tag{display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:.95rem}
   .ok{color:var(--ok)} .warn{color:var(--warn)} .muted{color:var(--muted)}
@@ -97,24 +93,37 @@
   }
 
   /* Responsive */
-  @media (max-width: 960px){
-    .genes-row{grid-template-columns:repeat(2, minmax(200px,1fr))}
-  }
-  @media (max-width: 640px){
-    .genes-row{grid-template-columns:1fr}
-  }
+  @media (max-width: 960px){ .genes-row{grid-template-columns:repeat(2, minmax(200px,1fr))} }
+  @media (max-width: 640px){ .genes-row{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
 <div class="frame">
   <div class="wrap">
     <h1>De quelle couleur seront mes chatons ?</h1>
-    <p class="subtitle">Calculette génétique — patrons, couleurs, tabby, récessifs et gène roux (explicite).</p>
+    <p class="subtitle">Calculette génétique — patrons, couleurs, tabby, récessifs et gène roux.</p>
 
     <!-- ===== 1) PÈRE ===== -->
     <div class="panel" id="pere">
       <h2>Père</h2>
 
+      <!-- Couleur de base (phénotype) -->
+      <div class="group">
+        <label for="pa_base" class="block">Couleur de base (phénotype)</label>
+        <select id="pa_base">
+          <option value="seal" selected>Seal</option>
+          <option value="blue">Blue</option>
+          <option value="chocolat">Chocolat</option>
+          <option value="lilac">Lilac</option>
+          <option value="cinnamon">Cinnamon</option>
+          <option value="fawn">Fawn</option>
+          <option value="roux">Roux</option>
+          <option value="creme">Crème</option>
+        </select>
+        <div class="hint">Le choix fixe les contraintes gènes porteurs (choco/cinna/dilution) et le statut Roux.</div>
+      </div>
+
+      <!-- Patron -->
       <div class="group">
         <label class="block">Patron (choix unique)</label>
         <div class="checks" data-one="pa_motif">
@@ -127,6 +136,7 @@
         </div>
       </div>
 
+      <!-- Tabby -->
       <div class="group">
         <label for="pa_tabby" class="block">Tabby (lynx)</label>
         <select id="pa_tabby">
@@ -138,40 +148,26 @@
 
       <div class="divider"></div>
 
-      <!-- Gènes sur UNE ligne -->
+      <!-- Gènes (Porteurs uniquement) -->
       <div class="genes-row">
         <div class="gene">
           <div class="gene-title">Chocolat (B/b)</div>
           <div class="checks">
-            <label><input type="checkbox" class="x-lock pa-choco-expr"> Exprimé (bb)</label>
-            <label><input type="checkbox" class="x-lock-oppo pa-choco-port"> Porteur (B b)</label>
+            <label><input type="checkbox" class="pa-choco-port"> Porteur (B b)</label>
           </div>
         </div>
         <div class="gene">
           <div class="gene-title">Cinnamon (B/bl)</div>
           <div class="checks">
-            <label><input type="checkbox" class="x-lock pa-cinn-expr"> Exprimé (bl bl)</label>
-            <label><input type="checkbox" class="x-lock-oppo pa-cinn-port"> Porteur (B bl)</label>
+            <label><input type="checkbox" class="pa-cinn-port"> Porteur (B bl)</label>
           </div>
         </div>
         <div class="gene">
           <div class="gene-title">Dilution (D/d)</div>
           <div class="checks">
-            <label><input type="checkbox" class="x-lock pa-dil-expr"> Exprimée (dd)</label>
-            <label><input type="checkbox" class="x-lock-oppo pa-dil-port"> Porteur (Dd)</label>
+            <label><input type="checkbox" class="pa-dil-port"> Porteur (Dd)</label>
           </div>
         </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="group">
-        <label for="pa_roux" class="block">Roux / Crème (gène O, lié au sexe)</label>
-        <select id="pa_roux">
-          <option value="non" selected>Non roux (oY)</option>
-          <option value="oui">Roux / Crème (OY)</option>
-        </select>
-        <div class="hint">Mâle : O = roux/crème. <strong>Pas</strong> de porteur.</div>
       </div>
     </div>
 
@@ -179,6 +175,32 @@
     <div class="panel" id="mere">
       <h2>Mère</h2>
 
+      <!-- Couleur de base (phénotype) -->
+      <div class="group">
+        <label for="pb_base" class="block">Couleur de base (phénotype)</label>
+        <select id="pb_base">
+          <!-- Non rousse -->
+          <option value="seal" selected>Seal</option>
+          <option value="blue">Blue</option>
+          <option value="chocolat">Chocolat</option>
+          <option value="lilac">Lilac</option>
+          <option value="cinnamon">Cinnamon</option>
+          <option value="fawn">Fawn</option>
+          <!-- Torties -->
+          <option value="seal_tortie">Seal Tortie</option>
+          <option value="blue_tortie">Blue Tortie</option>
+          <option value="chocolat_tortie">Chocolat Tortie</option>
+          <option value="lilac_tortie">Lilac Tortie</option>
+          <option value="cinnamon_tortie">Cinnamon Tortie</option>
+          <option value="fawn_tortie">Fawn Tortie</option>
+          <!-- Rousse / Crème -->
+          <option value="rousse">Rousse</option>
+          <option value="creme">Crème</option>
+        </select>
+        <div class="hint">Les options Tortie/Rousse/Crème définissent automatiquement le gène O (Oo/OO).</div>
+      </div>
+
+      <!-- Patron -->
       <div class="group">
         <label class="block">Patron (choix unique)</label>
         <div class="checks" data-one="pb_motif">
@@ -191,6 +213,7 @@
         </div>
       </div>
 
+      <!-- Tabby -->
       <div class="group">
         <label for="pb_tabby" class="block">Tabby (lynx)</label>
         <select id="pb_tabby">
@@ -202,41 +225,26 @@
 
       <div class="divider"></div>
 
-      <!-- Gènes sur UNE ligne -->
+      <!-- Gènes (Porteurs uniquement) -->
       <div class="genes-row">
         <div class="gene">
           <div class="gene-title">Chocolat (B/b)</div>
           <div class="checks">
-            <label><input type="checkbox" class="x-lock pb-choco-expr"> Exprimé (bb)</label>
-            <label><input type="checkbox" class="x-lock-oppo pb-choco-port"> Porteuse (B b)</label>
+            <label><input type="checkbox" class="pb-choco-port"> Porteuse (B b)</label>
           </div>
         </div>
         <div class="gene">
           <div class="gene-title">Cinnamon (B/bl)</div>
           <div class="checks">
-            <label><input type="checkbox" class="x-lock pb-cinn-expr"> Exprimé (bl bl)</label>
-            <label><input type="checkbox" class="x-lock-oppo pb-cinn-port"> Porteuse (B bl)</label>
+            <label><input type="checkbox" class="pb-cinn-port"> Porteuse (B bl)</label>
           </div>
         </div>
         <div class="gene">
           <div class="gene-title">Dilution (D/d)</div>
           <div class="checks">
-            <label><input type="checkbox" class="x-lock pb-dil-expr"> Exprimée (dd)</label>
-            <label><input type="checkbox" class="x-lock-oppo pb-dil-port"> Porteuse (Dd)</label>
+            <label><input type="checkbox" class="pb-dil-port"> Porteuse (Dd)</label>
           </div>
         </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="group">
-        <label for="pb_roux" class="block">Roux / Tortie (gène O, lié au sexe)</label>
-        <select id="pb_roux">
-          <option value="oo" selected>Non rousse (oo)</option>
-          <option value="Oo">Tortie (Oo)</option>
-          <option value="OO">Rousse (OO)</option>
-        </select>
-        <div class="hint">Femelle : OO = rousse ; Oo = tortie ; oo = non rousse.</div>
       </div>
     </div>
 
@@ -253,14 +261,14 @@
       <div class="section" id="r_patron"><h3>Patrons</h3><div class="tags" id="motif"></div></div>
       <div class="section" id="r_couleurs"><h3>Couleurs de base</h3><div class="tags" id="basecolors"></div></div>
       <div class="section" id="r_tabby"><h3>Tabby</h3><div class="tags" id="tabby"></div></div>
-      <div class="section" id="r_recessifs"><h3>Récessifs (infos élevage)</h3><div class="tags" id="recessifs"></div></div>
+      <div class="section" id="r_recessifs"><h3>Récessifs (porteurs)</h3><div class="tags" id="recessifs"></div></div>
       <div class="section" id="r_roux"><h3>Roux / Tortie (répartition M/F)</h3><div class="tags" id="roux"></div></div>
     </div>
   </div>
 </div>
 
 <script>
-/* ==== UI helpers ==== */
+/* ================== UI helpers ================== */
 function enforceSingleCheckbox(groupAttr){
   const box = document.querySelector('.checks[data-one="'+groupAttr+'"]');
   if(!box) return;
@@ -273,23 +281,64 @@ function enforceSingleCheckbox(groupAttr){
 enforceSingleCheckbox('pa_motif');
 enforceSingleCheckbox('pb_motif');
 
-function setupMutualLock(){
-  const pairs = [
-    ['pa-choco-expr','pa-choco-port'],['pa-cinn-expr','pa-cinn-port'],['pa-dil-expr','pa-dil-port'],
-    ['pb-choco-expr','pb-choco-port'],['pb-cinn-expr','pb-cinn-port'],['pb-dil-expr','pb-dil-port'],
-  ];
-  pairs.forEach(([a,b])=>{
-    const A=document.querySelector('.'+a), B=document.querySelector('.'+b);
-    if(A&&B){ A.addEventListener('change',()=>{ if(A.checked) B.checked=false; }); B.addEventListener('change',()=>{ if(B.checked) A.checked=false; }); }
-  });
-  // éviter choco+cinna simultanément en "porteur"
-  [['pa-choco-port','pa-cinn-port'],['pb-choco-port','pb-cinn-port']].forEach(([c1,c2])=>{
-    const C1=document.querySelector('.'+c1), C2=document.querySelector('.'+c2);
-    if(C1&&C2){ C1.addEventListener('change',()=>{ if(C1.checked) C2.checked=false; }); C2.addEventListener('change',()=>{ if(C2.checked) C1.checked=false; }); }
+/* Exclusions entre porteurs (B-locus: choco vs cinnamon ne se cochent pas ensemble) */
+function setupCarrierLocks(){
+  [['pa','choco','cinn'],['pb','choco','cinn']].forEach(([p,a,b])=>{
+    const A=document.querySelector(`.${p}-${a}-port`);
+    const B=document.querySelector(`.${p}-${b}-port`);
+    if(A&&B){
+      A.addEventListener('change',()=>{ if(A.checked) B.checked=false; });
+      B.addEventListener('change',()=>{ if(B.checked) A.checked=false; });
+    }
   });
 }
-setupMutualLock();
+setupCarrierLocks();
 
+/* ====== Base -> contraintes porteurs ======
+   Règles simples:
+   - Blue/Lilac/Fawn/Crème => dd exprimé -> porteur dilution (Dd) IMPOSSIBLE (désactivé).
+   - Lilac/Fawn => bb ou blbl exprimé -> porteur choco/cinna IMPOSSIBLE.
+   - Chocolat => bb exprimé -> porteur chocolat impossible.
+   - Cinnamon => blbl exprimé -> porteur cinnamon impossible.
+   - Roux/Rousse: O présent; D et B-locus possibles, donc on autorise porteurs choco/cinna/dilution SAUF si "Crème" (dd).
+   - Tortie (Oo): même contrainte D/B que la base sous-jacente (Seal/Blue/Choco/Lilac/Cinna/Fawn).
+*/
+function setDisabled(el, disabled){
+  el.disabled = disabled;
+  el.parentElement.style.opacity = disabled?0.55:1;
+  if(disabled) el.checked=false;
+}
+function syncBaseToCarriers(prefix){
+  const base = document.getElementById(prefix+'_base').value;
+  const choco = document.querySelector('.'+prefix+'-choco-port');
+  const cinn  = document.querySelector('.'+prefix+'-cinn-port');
+  const dil   = document.querySelector('.'+prefix+'-dil-port');
+
+  // reset
+  [choco,cinn,dil].forEach(el=>setDisabled(el,false));
+
+  const isBlueLike = (v)=>['blue','lilac','fawn','creme','blue_tortie','lilac_tortie','fawn_tortie'].includes(v);
+  const isLilacLike = (v)=>['lilac','lilac_tortie'].includes(v);
+  const isFawnLike  = (v)=>['fawn','fawn_tortie'].includes(v);
+  const isChocoLike = (v)=>['chocolat','chocolat_tortie','lilac','lilac_tortie'].includes(v);
+  const isCinnaLike = (v)=>['cinnamon','cinnamon_tortie','fawn','fawn_tortie'].includes(v);
+  const isCream     = (v)=>v==='creme';
+  // Dilution
+  if(isBlueLike(base)){ setDisabled(dil,true); }
+  // Chocolat exprimé (bb) => pas "porteur choco"
+  if(isChocoLike(base)){ setDisabled(choco,true); }
+  // Cinnamon exprimé (blbl) => pas "porteur cinna"
+  if(isCinnaLike(base)){ setDisabled(cinn,true); }
+  // Roux/Rousse: rien de plus, sauf Crème (dd déjà couvert par isBlueLike)
+  if(isCream(base)){ setDisabled(dil,true); }
+}
+['pa','pb'].forEach(p=>{
+  document.getElementById(p+'_base').addEventListener('change', ()=>syncBaseToCarriers(p));
+  // init
+  syncBaseToCarriers(p);
+});
+
+/* ==== Lecture des motifs sélectionnés ==== */
 function readMotif(name){
   const boxes=[...document.querySelectorAll('input[name="'+name+'"]')];
   const sel=boxes.find(cb=>cb.checked);
@@ -357,25 +406,46 @@ function computeMotif(pa,pb){
   return dist?dist:null;
 }
 
-/* ==== Couleurs (B/b/bl + D/d) ==== */
-function parentBGenotype(prefix){
-  const ch_expr=document.querySelector('.'+prefix+'-choco-expr').checked;
-  const ch_port=document.querySelector('.'+prefix+'-choco-port').checked;
-  const ci_expr=document.querySelector('.'+prefix+'-cinn-expr').checked;
-  const ci_port=document.querySelector('.'+prefix+'-cinn-port').checked;
-  if(ch_expr) return ['b','b'];
-  if(ci_expr) return ['bl','bl'];
-  if(ch_port) return ['B','b'];
-  if(ci_port) return ['B','bl'];
-  return ['B','B'];
+/* ==== Genotypes B/D à partir de la couleur de base (simplifiés) ==== */
+function baseToBDGenotype(base){
+  // Retourne [B-locus alleles], [D-locus alleles] pour le PHÉNOTYPE choisi.
+  // On capture l'exprimé (bb/blbl/dd) quand imposé par la couleur.
+  // Torties utilisent l’allèle non-roux sous-jacent (seal/blue/...).
+  const map={
+    seal:     {B:['B','B'], D:['D','D']},
+    blue:     {B:['B','B'], D:['d','d']},
+    chocolat: {B:['b','b'], D:['D','D']},
+    lilac:    {B:['b','b'], D:['d','d']},
+    cinnamon: {B:['bl','bl'], D:['D','D']},
+    fawn:     {B:['bl','bl'], D:['d','d']},
+
+    // Torties: on prend la base "non-roux" correspondante
+    seal_tortie:{B:['B','B'], D:['D','D']},
+    blue_tortie:{B:['B','B'], D:['d','d']},
+    chocolat_tortie:{B:['b','b'], D:['D','D']},
+    lilac_tortie:{B:['b','b'], D:['d','d']},
+    cinnamon_tortie:{B:['bl','bl'], D:['D','D']},
+    fawn_tortie:{B:['bl','bl'], D:['d','d']},
+
+    // Roux/Crème: le O masque la base; génétiquement on peut porter B/bl et D/d,
+    // mais côté phénotype on affiche Roux/Crème via section Roux/Tortie
+    roux:      {B:['B','B'], D:['D','D']}, // laisser neutre (pas d’info exprimée)
+    creme:     {B:['B','B'], D:['d','d']},
+    rousse:    {B:['B','B'], D:['D','D']},
+  };
+  return map[base] || map.seal;
 }
-function parentDGenotype(prefix){
-  const d_expr=document.querySelector('.'+prefix+'-dil-expr').checked;
-  const d_port=document.querySelector('.'+prefix+'-dil-port').checked;
-  if(d_expr) return ['d','d'];
-  if(d_port) return ['D','d'];
-  return ['D','D'];
+
+/* Porteurs déclarés par l’utilisateur */
+function carriersFromUI(prefix){
+  return {
+    choco: document.querySelector('.'+prefix+'-choco-port').checked,
+    cinn:  document.querySelector('.'+prefix+'-cinn-port').checked,
+    dil:   document.querySelector('.'+prefix+'-dil-port').checked
+  };
 }
+
+/* Gamètes simples (si homozygote -> 100%) */
 function gametes(a1,a2){ return a1===a2?[[a1,1]]:[[a1,.5],[a2,.5]]; }
 function cross(gA,gB){
   const m=new Map();
@@ -391,7 +461,7 @@ function phenotypeB(alleles){
   if(alleles[0]==='b' && alleles[1]==='b') return 'Chocolat';
   return 'Cinnamon';
 }
-function applyDilution(base,d){
+function applyDilution(base, d){
   const dd=(d[0]==='d' && d[1]==='d');
   if(!dd) return base;
   if(base==='Seal') return 'Blue';
@@ -399,20 +469,50 @@ function applyDilution(base,d){
   if(base==='Cinnamon') return 'Fawn';
   return base;
 }
+
+/* Calcule couleurs base hors gène O (on affiche le O séparément) */
 function computeBaseColors(){
-  const bA=parentBGenotype('pa'), bB=parentBGenotype('pb');
-  const dA=parentDGenotype('pa'), dB=parentDGenotype('pb');
-  const kidsB=cross(gametes(bA[0],bA[1]), gametes(bB[0],bB[1]));
-  const kidsD=cross(gametes(dA[0],dA[1]), gametes(dB[0],dB[1]));
+  const pa_base=document.getElementById('pa_base').value;
+  const pb_base=document.getElementById('pb_base').value;
+
+  const gA=baseToBDGenotype(pa_base);
+  const gB=baseToBDGenotype(pb_base);
+
+  // intègre porteurs utilisateur (si compatibles)
+  const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
+
+  // B-locus: convertir ['B','B'] en statut porteur si choisi
+  function injectCarriersB(Balleles, carriers){
+    let [x,y]=Balleles;
+    if(x==='B'&&y==='B'){
+      if(carriers.choco) y='b';
+      else if(carriers.cinn) y='bl';
+    }
+    return [x,y];
+  }
+  // D-locus
+  function injectCarriersD(Dalleles, carriers){
+    let [x,y]=Dalleles;
+    if(x==='D'&&y==='D' && carriers.dil) y='d';
+    return [x,y];
+  }
+
+  const BA=injectCarriersB(gA.B, ca), DA=injectCarriersD(gA.D, ca);
+  const BB=injectCarriersB(gB.B, cb), DB=injectCarriersD(gB.D, cb);
+
+  const kidsB=cross(gametes(BA[0],BA[1]), gametes(BB[0],BB[1]));
+  const kidsD=cross(gametes(DA[0],DA[1]), gametes(DB[0],DB[1]));
+
   const tally=new Map();
   kidsB.forEach(([b,pB])=>kidsD.forEach(([d,pD])=>{
     const base=phenotypeB(b); const col=applyDilution(base,d);
     tally.set(col,(tally.get(col)||0)+pB*pD);
   }));
+  // Retour trié
   return [...tally.entries()].map(([c,p])=>({color:c,prob:Math.round(p*1000)/10})).sort((a,b)=>b.prob-a.prob);
 }
 
-/* ==== Tabby ==== */
+/* ==== Tabby (dominant) ==== */
 function computeTabby(paTabby,pbTabby){
   const geno=(v)=>v==='non'?'aa':(v==='oui'?'TT':'Ta');
   const gA=geno(paTabby), gB=geno(pbTabby), out=[];
@@ -425,29 +525,43 @@ function computeTabby(paTabby,pbTabby){
   return out;
 }
 
-/* ==== Récessifs (affichage) ==== */
-function locusOutcome(Aexpr,Aport,Bexpr,Bport,nom){
-  Aport=!Aexpr&&Aport; Bport=!Bexpr&&Bport;
+/* ==== Récessifs (affichage porteurs) ==== */
+function carriersOutcome(Acar,Bcar,nom){
+  // Renvoie uniquement des infos "porteur" (plus de "exprimé")
   const lines=[];
-  if(Aexpr&&Bexpr) lines.push({txt:`${nom}: 100% exprimé (tous transmetteurs certains).`,cls:'ok'});
-  else if((Aexpr&&Bport)||(Bexpr&&Aport)) lines.push({txt:`${nom}: ≈ 50% exprimé / 50% porteur.`,cls:''});
-  else if(Aexpr&&!Bexpr&&!Bport) lines.push({txt:`${nom}: 100% porteurs (parent exprimé = transmetteur certain).`,cls:'ok'});
-  else if(Bexpr&&!Aexpr&&!Aport) lines.push({txt:`${nom}: 100% porteurs (parent exprimé = transmetteur certain).`,cls:'ok'});
-  else if(Aport&&Bport) lines.push({txt:`${nom}: ≈ 25% exprimé / 50% porteur / 25% non porteur.`,cls:''});
-  else if((Aport&&!Bexpr&&!Bport)||(Bport&&!Aexpr&&!Aport)) lines.push({txt:`${nom}: ≈ 50% porteur / 50% non porteur.`,cls:''});
-  else lines.push({txt:`${nom}: Non transmis.`,cls:'muted'});
+  if(Acar && Bcar) lines.push({txt:`${nom}: ≈ 50% porteurs / 50% non porteurs.`,cls:''});
+  else if((Acar && !Bcar) || (!Acar && Bcar)) lines.push({txt:`${nom}: ≈ 50% porteurs / 50% non porteurs.`,cls:''});
+  else lines.push({txt:`${nom}: Non porteur attendu (sauf surprise généalogique).`,cls:'muted'});
   return lines;
 }
 
-/* ==== Roux/Tortie — répartition claire M/F ==== */
-function computeRouxExplicit(maleRoux, femState){
+/* ==== Statut O (Roux/Tortie) dérivé des menus ====
+   Mâle: base 'roux' => O ; 'creme' => O + dd ; sinon non roux.
+   Femelle:
+     - *_tortie => Oo
+     - rousse/creme => OO
+     - autres => oo
+*/
+function maleOState(){
+  const b=document.getElementById('pa_base').value;
+  if(b==='roux'||b==='creme') return 'O';
+  return 'o';
+}
+function femaleOState(){
+  const b=document.getElementById('pb_base').value;
+  if(b.endsWith('_tortie')) return 'Oo';
+  if(b==='rousse' || b==='creme') return 'OO';
+  return 'oo';
+}
+function computeRouxExplicitFromBase(){
+  const m=maleOState(), f=femaleOState();
   let males='', females='';
-  if(maleRoux==='oui' && femState==='oo'){ males='0% roux / 100% non roux'; females='100% torties'; }
-  else if(maleRoux==='oui' && femState==='Oo'){ males='50% roux / 50% non roux'; females='50% rousses / 50% torties'; }
-  else if(maleRoux==='oui' && femState==='OO'){ males='100% roux'; females='100% rousses'; }
-  else if(maleRoux==='non' && femState==='oo'){ males='0% roux'; females='0% rousses/torties'; }
-  else if(maleRoux==='non' && femState==='Oo'){ males='50% roux / 50% non roux'; females='50% torties / 50% non rousses'; }
-  else if(maleRoux==='non' && femState==='OO'){ males='100% roux'; females='100% torties'; }
+  if(m==='O' && f==='oo'){ males='0% roux / 100% non roux'; females='100% torties'; }
+  else if(m==='O' && f==='Oo'){ males='50% roux / 50% non roux'; females='50% rousses / 50% torties'; }
+  else if(m==='O' && f==='OO'){ males='100% roux'; females='100% rousses'; }
+  else if(m==='o' && f==='oo'){ males='0% roux'; females='0% rousses/torties'; }
+  else if(m==='o' && f==='Oo'){ males='50% roux / 50% non roux'; females='50% torties / 50% non rousses'; }
+  else if(m==='o' && f==='OO'){ males='100% roux'; females='100% torties'; }
   return [{txt:`Mâles : ${males}`},{txt:`Femelles : ${femelles}`}];
 }
 
@@ -460,7 +574,7 @@ function onCalculate(){
   const motifItems = dist ? Object.entries(dist).map(([k,v])=>({txt:`${k}: ${v}%`})) : [{txt:'Combinaison non définie.',cls:'warn'}];
   renderTags('motif', motifItems);
 
-  // Couleurs
+  // Couleurs de base (hors O)
   const colors=computeBaseColors();
   renderTags('basecolors', colors.length ? colors.map(c=>({txt:`${c.color}: ${c.prob}%`})) : [{txt:'—',cls:'muted'}]);
 
@@ -470,54 +584,9 @@ function onCalculate(){
     document.getElementById('pb_tabby').value
   ));
 
-  // Récessifs (pédagogie)
+  // Récessifs porteurs
+  const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
   let rec=[];
-  locusOutcome(
-    document.querySelector('.pa-choco-expr').checked,
-    document.querySelector('.pa-choco-port').checked,
-    document.querySelector('.pb-choco-expr').checked,
-    document.querySelector('.pb-choco-port').checked,'Chocolat'
-  ).forEach(x=>rec.push(x));
-  locusOutcome(
-    document.querySelector('.pa-cinn-expr').checked,
-    document.querySelector('.pa-cinn-port').checked,
-    document.querySelector('.pb-cinn-expr').checked,
-    document.querySelector('.pb-cinn-port').checked,'Cinnamon'
-  ).forEach(x=>rec.push(x));
-  locusOutcome(
-    document.querySelector('.pa-dil-expr').checked,
-    document.querySelector('.pa-dil-port').checked,
-    document.querySelector('.pb-dil-expr').checked,
-    document.querySelector('.pb-dil-port').checked,'Dilution'
-  ).forEach(x=>rec.push(x));
-  renderTags('recessifs', rec);
-
-  // Roux (M/F)
-  const rouxItems = computeRouxExplicit(
-    document.getElementById('pa_roux').value,
-    document.getElementById('pb_roux').value
-  );
-  renderTags('roux', rouxItems);
-}
-
-/* Boutons */
-document.getElementById('btn_calc').addEventListener('click', onCalculate);
-document.getElementById('btn_reset').addEventListener('click', ()=>{
-  document.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
-  document.getElementById('pa_tabby').value='non'; document.getElementById('pb_tabby').value='non';
-  document.getElementById('pa_roux').value='non'; document.getElementById('pb_roux').value='oo';
-  ['motif','basecolors','tabby','recessifs','roux'].forEach(id=>document.getElementById(id).innerHTML='');
-  document.getElementById('formError').style.display='none';
-});
-document.getElementById('btn_print').addEventListener('click', ()=>window.print());
-
-/* Validation patrons obligatoires */
-function requireMotifs(){
-  const pa=readMotif('pa_motif'), pb=readMotif('pb_motif');
-  const err=document.getElementById('formError');
-  if(!pa||!pb){ err.textContent='Erreur : sélectionne un patron pour chaque parent.'; err.style.display='block'; return null; }
-  err.style.display='none'; return {pa,pb};
-}
-</script>
-</body>
-</html>
+  carriersOutcome(ca.choco, cb.choco, 'Chocolat').forEach(x=>rec.push(x));
+  carriersOutcome(ca.cinn,  cb.cinn,  'Cinnamon').forEach(x=>rec.push(x));
+  carriersOutcome(ca.dil,   cb.dil,   'Dilution').for
