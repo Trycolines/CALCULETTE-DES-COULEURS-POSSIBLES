@@ -8,23 +8,26 @@
 <style>
   :root{
     --page-bg:#ffffff;
-    --frame-bg:#FAF3F7;    /* rose très doux */
-    --frame-border:#D6B3E0;/* lilac pastel */
+    --frame-bg:#FAF3F7;      /* rose très doux */
+    --frame-border:#D6B3E0;  /* lilac pastel */
     --panel:#ffffff;
-    --border:#e9defc;      /* lilac clair interne */
-    --accent:#6b4ea3;      /* lilac soutenu */
-    --accent-2:#d37fb2;    /* rose accent */
+    --border:#e9defc;        /* lilac clair interne */
+    --accent:#6b4ea3;        /* lilac soutenu */
+    --accent-2:#d37fb2;      /* rose accent */
     --ink:#26233a; --muted:#6b6a75;
     --radius:14px;
   }
   html,body{margin:0;padding:0;background:var(--page-bg);color:var(--ink)}
   body{font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; line-height:1.5; font-size:15px}
-  .frame{max-width:980px; margin:18px auto; background:var(--frame-bg); border:2px solid var(--frame-border); border-radius:16px; padding:14px;}
+  /* Cadre général (tout entouré) */
+  .frame{max-width:980px; margin:18px auto; background:var(--frame-bg);
+    border:2px solid var(--frame-border); border-radius:16px; padding:14px;}
   .wrap{max-width:940px; margin:0 auto}
   h1{font-family:"Dancing Script",cursive; font-size:2.1rem; margin:0 0 4px; color:var(--accent)}
   .subtitle{margin:0 0 12px; color:#87518a; font-size:0.98rem}
 
-  .panel{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:12px; margin:10px 0;}
+  .panel{background:var(--panel); border:1px solid var(--border);
+    border-radius:var(--radius); padding:12px; margin:10px 0;}
   .panel h2{font-size:1.05rem; margin:0 0 8px; color:var(--accent-2)}
 
   .row{display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap}
@@ -37,7 +40,7 @@
 
   .out{background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:12px; margin:10px 0}
   .section{margin:6px 0 8px}
-  .section h3{font-family:"Dancing Script",cursive; font-size:1.25rem; color:#7a5ab0; margin:4px 0}
+  .section h3{font-family:"Dancing+Script",cursive; font-size:1.25rem; color:#7a5ab0; margin:4px 0}
   .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px}
   .tag{display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:.93rem}
   .ok{color:#167f5d} .muted{color:var(--muted)}
@@ -85,7 +88,7 @@
             <div class="checks">
               <label class="pill"><input type="checkbox" class="pa-choco-port"> Chocolate (B b)</label>
               <label class="pill"><input type="checkbox" class="pa-cinn-port"> Cinnamon (B bl)</label>
-              <label class="pill"><input type="checkbox" class="pa-dil-port"> Dilution (Dd)</label>
+              <label class="pill"><input type="checkbox" class="pa-dil-port"> Dilution (D d)</label>
             </div>
           </div>
         </div>
@@ -149,7 +152,7 @@
             <div class="checks">
               <label class="pill"><input type="checkbox" class="pb-choco-port"> Chocolate (B b)</label>
               <label class="pill"><input type="checkbox" class="pb-cinn-port"> Cinnamon (B bl)</label>
-              <label class="pill"><input type="checkbox" class="pb-dil-port"> Dilution (Dd)</label>
+              <label class="pill"><input type="checkbox" class="pb-dil-port"> Dilution (D d)</label>
             </div>
           </div>
         </div>
@@ -202,26 +205,26 @@
 </div>
 
 <script>
-/* ====== utilitaires ====== */
+/* ===== utilitaires ===== */
 function setDisabled(el, disabled){ el.disabled=disabled; el.parentElement.style.opacity=disabled?0.55:1; if(disabled) el.checked=false; }
-function renderTags(id, items){ const el=document.getElementById(id); el.innerHTML = (items&&items.length)? items.map(x=>`<span class="tag ${x.cls||''}">${x.txt}</span>`).join('') : '<span class="tag muted">—</span>'; }
+function renderTags(id, items){ const el=document.getElementById(id); el.innerHTML=(items&&items.length)? items.map(x=>`<span class="tag ${x.cls||''}">${x.txt}</span>`).join(''):'<span class="tag muted">—</span>'; }
 function round1(x){ return Math.round(x*10)/10; }
 
-/* ====== cohérence porteurs ====== */
+/* ===== cohérence porteurs ===== */
 function syncBaseToCarriers(prefix){
-  const base = document.getElementById(prefix+'_base').value;
-  const choco = document.querySelector('.'+prefix+'-choco-port');
-  const cinn  = document.querySelector('.'+prefix+'-cinn-port');
-  const dil   = document.querySelector('.'+prefix+'-dil-port');
-  [choco, cinn, dil].forEach(el=>setDisabled(el,false));
+  const base=document.getElementById(prefix+'_base').value;
+  const choco=document.querySelector('.'+prefix+'-choco-port');
+  const cinn =document.querySelector('.'+prefix+'-cinn-port');
+  const dil  =document.querySelector('.'+prefix+'-dil-port');
+  [choco,cinn,dil].forEach(el=>setDisabled(el,false));
 
-  const isDiluted   = v => ['blue','lilac','fawn','cream','blue_tortie','lilac_tortie','fawn_tortie'].includes(v);
-  const isChocoPh   = v => ['chocolat','chocolat_tortie','lilac','lilac_tortie'].includes(v);
-  const isCinnaExpr = v => ['cinnamon','cinnamon_tortie','fawn','fawn_tortie'].includes(v);
+  const isDiluted = v=>['blue','lilac','fawn','cream','blue_tortie','lilac_tortie','fawn_tortie'].includes(v);
+  const isChocoPh = v=>['chocolat','chocolat_tortie','lilac','lilac_tortie'].includes(v);
+  const isCinnaEx = v=>['cinnamon','cinnamon_tortie','fawn','fawn_tortie'].includes(v);
 
-  if (isDiluted(base)) setDisabled(dil,true);
-  if (isCinnaExpr(base)) { setDisabled(cinn,true); setDisabled(choco,true); return; }
-  if (isChocoPh(base)) { setDisabled(choco,true); }
+  if(isDiluted(base)) setDisabled(dil,true);
+  if(isCinnaEx(base)){ setDisabled(cinn,true); setDisabled(choco,true); return; }
+  if(isChocoPh(base)) setDisabled(choco,true);
 }
 function lockExclusiveCarriers(prefix){
   const ch=document.querySelector('.'+prefix+'-choco-port');
@@ -232,7 +235,7 @@ function lockExclusiveCarriers(prefix){
 }
 ['pa','pb'].forEach(p=>{ document.getElementById(p+'_base').addEventListener('change',()=>syncBaseToCarriers(p)); syncBaseToCarriers(p); lockExclusiveCarriers(p); });
 
-/* ====== patrons (table officielle) ====== */
+/* ===== patrons (table officielle) ===== */
 const P={COLOURPOINT:'colourpoint', MITTED:'mitted', HIGH_MITTED:'high_mitted', BICOLORE:'bicolore', MID_HIGH_WHITE:'mid_high_white', VAN:'van_high_white'};
 const motifRuleMap={
   [`${P.COLOURPOINT}|${P.COLOURPOINT}`]: {'Colourpoint':100},
@@ -277,9 +280,9 @@ const motifRuleMap={
   [`${P.VAN}|${P.MID_HIGH_WHITE}`]: {'Mid High White':50,'Van/High White':50},
   [`${P.VAN}|${P.VAN}`]: {'Van/High White':100}
 };
-function computeMotif(pa,pb){ const key=`${pa}|${pb}`, alt=`${pb}|${pa}`; return motifRuleMap[key]||motifRuleMap[alt]||null; }
+function computeMotif(pa,pb){ const k=`${pa}|${pb}`, r=`${pb}|${pa}`; return motifRuleMap[k]||motifRuleMap[r]||null; }
 
-/* ====== couleurs (B/D) ====== */
+/* ===== couleurs (B/D) ===== */
 function baseToBDGenotype(base){
   const map={
     seal:{B:['B','B'],D:['D','D']},
@@ -331,7 +334,7 @@ function applyDilution(base, d){
   if(base==='Cinnamon') return 'Fawn';
   return base;
 }
-/* porteurs -> injection (inclut chocolate b/b -> b/bl si "cinn" coché) */
+/* injection porteurs (inclut chocolate b/b -> b/bl si 'cinn' coché) */
 function injectB(B,car){ let [x,y]=B;
   if(car.choco){ if(x==='B'&&y==='B') y='b'; }
   if(car.cinn){ if(x==='B'&&y==='B') y='bl'; else if(x==='b'&&y==='b') y='bl'; }
@@ -355,7 +358,7 @@ function computeBaseColors(){
   }));
   return [...tally.entries()].map(([c,p])=>({color:c,prob:round1(p*100)})).sort((a,b)=>b.prob-a.prob);
 }
-/* probabilité globale de dd (pour Red -> Cream) */
+/* probabilité dd globale (pour Red->Cream) */
 function ddPercent(){
   const pa_base=document.getElementById('pa_base').value;
   const pb_base=document.getElementById('pb_base').value;
@@ -367,7 +370,7 @@ function ddPercent(){
   return round1(p*100);
 }
 
-/* ====== Tabby ====== */
+/* ===== Tabby ===== */
 function computeTabby(paTabby,pbTabby){
   const geno=v=>v==='non'?'aa':(v==='oui'?'TT':'Ta');
   const gA=geno(paTabby), gB=geno(pbTabby), out=[];
@@ -380,13 +383,13 @@ function computeTabby(paTabby,pbTabby){
   return out;
 }
 
-/* ====== Récessifs (porteurs seulement) ====== */
+/* ===== Récessifs (porteurs seulement) ===== */
 function carriersOutcome(Acar,Bcar,nom){
   if(!Acar && !Bcar) return [];
   return [{txt:`${nom}: ≈ 50% porteurs / 50% non porteurs.`}];
 }
 
-/* ====== Gène O : Red/Cream & Torties (split par dd) ====== */
+/* ===== Gène O : Red/Cream & Torties (split par dd) ===== */
 function maleOState(){ const b=document.getElementById('pa_base').value; return (b==='red'||b==='cream') ? 'O' : 'o'; }
 function femaleOState(){
   const b=document.getElementById('pb_base').value;
@@ -394,28 +397,27 @@ function femaleOState(){
   if(b==='red' || b==='cream') return 'OO';
   return 'oo';
 }
-function splitRed(totalRed, pdd){ // retourne string Red/Cream avec % arrondis
+function splitRed(totalRed, pdd){
   const cream = round1(totalRed * pdd / 100);
   const red   = round1(totalRed - cream);
-  if (totalRed===0) return '0% Red';
-  if (cream===0)    return `${red}% Red`;
-  if (red===0)      return `${cream}% Cream`;
+  if(totalRed===0) return '0% Red';
+  if(cream===0)    return `${red}% Red`;
+  if(red===0)      return `${cream}% Cream`;
   return `${red}% Red / ${cream}% Cream`;
 }
-function splitTortie(totalTortie, pdd){ // pour femelles
+function splitTortie(totalTortie, pdd){
   const creamT = round1(totalTortie * pdd / 100);
   const tortie = round1(totalTortie - creamT);
-  if (totalTortie===0) return '0% Torties';
-  if (creamT===0)      return `${tortie}% Torties`;
-  if (tortie===0)      return `${creamT}% Cream-torties`;
+  if(totalTortie===0) return '0% Torties';
+  if(creamT===0)      return `${tortie}% Torties`;
+  if(tortie===0)      return `${creamT}% Cream-torties`;
   return `${tortie}% Torties / ${creamT}% Cream-torties`;
 }
 function computeRouxExplicitFromBase(){
-  const m = maleOState(), f = femaleOState();
-  const pdd = ddPercent(); // % dd partagé par toute la portée
+  const m=maleOState(), f=femaleOState();
+  const pdd=ddPercent();
 
   let malesRed=0, femalesRed=0, femalesTortie=0;
-
   if(m==='O' && f==='oo'){ malesRed=100; femalesTortie=100; }
   else if(m==='O' && f==='Oo'){ malesRed=100; femalesRed=50; femalesTortie=50; }
   else if(m==='O' && f==='OO'){ malesRed=100; femalesRed=100; }
@@ -423,16 +425,16 @@ function computeRouxExplicitFromBase(){
   else if(m==='o' && f==='Oo'){ malesRed=50; femalesTortie=50; }
   else if(m==='o' && f==='OO'){ malesRed=100; femalesTortie=100; }
 
-  const maleLine = `Mâles : ${splitRed(malesRed, pdd)}`;
-  const femaleParts = [];
-  if (femalesRed>0)     femaleParts.push(splitRed(femalesRed, pdd).replace(/Red/g,'Red'));
-  if (femalesTortie>0)  femaleParts.push(splitTortie(femalesTortie, pdd));
-  const femaleLine = `Femelles : ${femaleParts.length? femaleParts.join(' + ') : '0% Red/Torties'}`;
+  const maleLine   = `Mâles : ${splitRed(malesRed, pdd)}`;
+  const femaleBits = [];
+  if(femalesRed>0)    femaleBits.push(splitRed(femalesRed, pdd));
+  if(femalesTortie>0) femaleBits.push(splitTortie(femalesTortie, pdd));
+  const femaleLine = `Femelles : ${femaleBits.length? femaleBits.join(' + ') : '0% Red/Torties'}`;
 
   return [{txt:maleLine},{txt:femaleLine}];
 }
 
-/* ====== calcul global ====== */
+/* ===== Calcul global ===== */
 function onCalculate(){
   const pa=document.getElementById('pa_motif').value;
   const pb=document.getElementById('pb_motif').value;
@@ -440,8 +442,8 @@ function onCalculate(){
   if(!pa || !pb){ err.textContent='Sélectionne un patron pour chaque parent.'; err.style.display='block'; }
   else { err.style.display='none'; }
 
-  const dist = (pa && pb) ? computeMotif(pa,pb) : null;
-  renderTags('motif', dist ? Object.entries(dist).map(([k,v])=>({txt:`${k}: ${v}%`})) : []);
+  const dist=(pa&&pb)?computeMotif(pa,pb):null;
+  renderTags('motif', dist? Object.entries(dist).map(([k,v])=>({txt:`${k}: ${v}%`})) : []);
 
   const colors=computeBaseColors();
   renderTags('basecolors', colors.map(c=>({txt:`${c.color}: ${c.prob}%`})) );
@@ -452,16 +454,15 @@ function onCalculate(){
   ));
 
   const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
-  let rec=[];
-  rec.push(...carriersOutcome(ca.choco, cb.choco, 'Chocolate'));
-  rec.push(...carriersOutcome(ca.cinn,  cb.cinn,  'Cinnamon'));
-  rec.push(...carriersOutcome(ca.dil,   cb.dil,   'Dilution'));
+  const rec=[...carriersOutcome(ca.choco,cb.choco,'Chocolate'),
+             ...carriersOutcome(ca.cinn, cb.cinn, 'Cinnamon'),
+             ...carriersOutcome(ca.dil,  cb.dil,  'Dilution')];
   renderTags('recessifs', rec.filter(Boolean));
 
   renderTags('roux', computeRouxExplicitFromBase());
 }
 
-/* ====== boutons ====== */
+/* ===== Boutons ===== */
 document.getElementById('btn_calc').addEventListener('click', onCalculate);
 document.getElementById('btn_reset').addEventListener('click', ()=>{
   document.querySelectorAll('input[type="checkbox"]').forEach(cb=>{ cb.checked=false; cb.disabled=false; cb.parentElement.style.opacity=1; });
