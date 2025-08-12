@@ -58,6 +58,22 @@
   .hint{font-size:.92rem; color:var(--muted); margin-top:6px}
   .divider{height:1px; background:var(--border); margin:18px 0}
 
+  /* Ligne des gènes (3 blocs côte à côte) */
+  .genes-row{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(220px,1fr));
+    gap:14px;
+  }
+  .gene{
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:12px;
+    background:#fff;
+  }
+  .gene .gene-title{
+    font-weight:600; margin-bottom:8px; color:#5f4799; font-size:0.98rem
+  }
+
   /* Actions */
   .actions{display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 4px}
   .btn{border:1px solid var(--accent); background:var(--accent); color:#fff; padding:10px 14px; border-radius:12px; cursor:pointer}
@@ -78,6 +94,14 @@
     .no-print{display:none !important}
     body{background:#fff}
     .frame{border-color:#ccc; background:#fff}
+  }
+
+  /* Responsive */
+  @media (max-width: 960px){
+    .genes-row{grid-template-columns:repeat(2, minmax(200px,1fr))}
+  }
+  @media (max-width: 640px){
+    .genes-row{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -114,25 +138,28 @@
 
       <div class="divider"></div>
 
-      <div class="group">
-        <label class="block">Chocolat (B/b)</label>
-        <div class="checks">
-          <label><input type="checkbox" class="x-lock pa-choco-expr"> Exprimé (bb)</label>
-          <label><input type="checkbox" class="x-lock-oppo pa-choco-port"> Porteur (B b)</label>
+      <!-- Gènes sur UNE ligne -->
+      <div class="genes-row">
+        <div class="gene">
+          <div class="gene-title">Chocolat (B/b)</div>
+          <div class="checks">
+            <label><input type="checkbox" class="x-lock pa-choco-expr"> Exprimé (bb)</label>
+            <label><input type="checkbox" class="x-lock-oppo pa-choco-port"> Porteur (B b)</label>
+          </div>
         </div>
-      </div>
-      <div class="group">
-        <label class="block">Cinnamon (B/bl)</label>
-        <div class="checks">
-          <label><input type="checkbox" class="x-lock pa-cinn-expr"> Exprimé (bl bl)</label>
-          <label><input type="checkbox" class="x-lock-oppo pa-cinn-port"> Porteur (B bl)</label>
+        <div class="gene">
+          <div class="gene-title">Cinnamon (B/bl)</div>
+          <div class="checks">
+            <label><input type="checkbox" class="x-lock pa-cinn-expr"> Exprimé (bl bl)</label>
+            <label><input type="checkbox" class="x-lock-oppo pa-cinn-port"> Porteur (B bl)</label>
+          </div>
         </div>
-      </div>
-      <div class="group">
-        <label class="block">Dilution (D/d)</label>
-        <div class="checks">
-          <label><input type="checkbox" class="x-lock pa-dil-expr"> Exprimée (dd)</label>
-          <label><input type="checkbox" class="x-lock-oppo pa-dil-port"> Porteur (Dd)</label>
+        <div class="gene">
+          <div class="gene-title">Dilution (D/d)</div>
+          <div class="checks">
+            <label><input type="checkbox" class="x-lock pa-dil-expr"> Exprimée (dd)</label>
+            <label><input type="checkbox" class="x-lock-oppo pa-dil-port"> Porteur (Dd)</label>
+          </div>
         </div>
       </div>
 
@@ -175,25 +202,28 @@
 
       <div class="divider"></div>
 
-      <div class="group">
-        <label class="block">Chocolat (B/b)</label>
-        <div class="checks">
-          <label><input type="checkbox" class="x-lock pb-choco-expr"> Exprimé (bb)</label>
-          <label><input type="checkbox" class="x-lock-oppo pb-choco-port"> Porteuse (B b)</label>
+      <!-- Gènes sur UNE ligne -->
+      <div class="genes-row">
+        <div class="gene">
+          <div class="gene-title">Chocolat (B/b)</div>
+          <div class="checks">
+            <label><input type="checkbox" class="x-lock pb-choco-expr"> Exprimé (bb)</label>
+            <label><input type="checkbox" class="x-lock-oppo pb-choco-port"> Porteuse (B b)</label>
+          </div>
         </div>
-      </div>
-      <div class="group">
-        <label class="block">Cinnamon (B/bl)</label>
-        <div class="checks">
-          <label><input type="checkbox" class="x-lock pb-cinn-expr"> Exprimé (bl bl)</label>
-          <label><input type="checkbox" class="x-lock-oppo pb-cinn-port"> Porteuse (B bl)</label>
+        <div class="gene">
+          <div class="gene-title">Cinnamon (B/bl)</div>
+          <div class="checks">
+            <label><input type="checkbox" class="x-lock pb-cinn-expr"> Exprimé (bl bl)</label>
+            <label><input type="checkbox" class="x-lock-oppo pb-cinn-port"> Porteuse (B bl)</label>
+          </div>
         </div>
-      </div>
-      <div class="group">
-        <label class="block">Dilution (D/d)</label>
-        <div class="checks">
-          <label><input type="checkbox" class="x-lock pb-dil-expr"> Exprimée (dd)</label>
-          <label><input type="checkbox" class="x-lock-oppo pb-dil-port"> Porteuse (Dd)</label>
+        <div class="gene">
+          <div class="gene-title">Dilution (D/d)</div>
+          <div class="checks">
+            <label><input type="checkbox" class="x-lock pb-dil-expr"> Exprimée (dd)</label>
+            <label><input type="checkbox" class="x-lock-oppo pb-dil-port"> Porteuse (Dd)</label>
+          </div>
         </div>
       </div>
 
@@ -488,8 +518,6 @@ function requireMotifs(){
   if(!pa||!pb){ err.textContent='Erreur : sélectionne un patron pour chaque parent.'; err.style.display='block'; return null; }
   err.style.display='none'; return {pa,pb};
 }
-
-onCalculate();
 </script>
 </body>
 </html>
