@@ -10,8 +10,8 @@
 <style>
   :root{
     --page-bg:#ffffff;
-    --frame-bg:#FAF3F7;     /* fond du cadre englobant (rosé très doux) */
-    --frame-border:#D6B3E0; /* lilac pastel pour la bordure du cadre */
+    --frame-bg:#FAF3F7;     /* fond cadre englobant (rosé doux) */
+    --frame-border:#D6B3E0; /* lilac pastel bordure */
     --panel:#ffffff;
     --border:#e9defc;       /* lilac clair interne */
     --accent:#6b4ea3;       /* lilac soutenu */
@@ -19,241 +19,210 @@
     --ink:#26233a;
     --muted:#6b6a75;
     --ok:#167f5d; --warn:#a56a00; --err:#7a2a2a;
+    --radius:14px;
   }
-
   html,body{margin:0;padding:0;background:var(--page-bg);color:var(--ink)}
-  body{font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; line-height:1.65}
+  body{font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; line-height:1.5; font-size:15px}
 
-  /* Cadre englobant TOUT */
+  /* Cadre global compact */
   .frame{
-    max-width:1024px;
-    margin:24px auto;
-    background:var(--frame-bg);
-    border:2px solid var(--frame-border);
-    border-radius:16px;
-    padding:22px;
+    max-width:980px; margin:18px auto; background:var(--frame-bg);
+    border:2px solid var(--frame-border); border-radius:16px; padding:14px;
   }
-  .wrap{max-width:980px;margin:0 auto}
+  .wrap{max-width:940px; margin:0 auto}
 
-  h1{font-family:"Dancing Script",cursive; font-size:2.4rem; margin:0 0 8px; color:var(--accent)}
-  .subtitle{margin:0 0 20px; color:#87518a}
+  h1{font-family:"Dancing Script",cursive; font-size:2.1rem; margin:0 0 4px; color:var(--accent)}
+  .subtitle{margin:0 0 12px; color:#87518a; font-size:0.98rem}
 
-  /* Panneaux Père & Mère */
+  /* Panneaux Père/Mère compacts */
   .panel{
-    background:var(--panel);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:18px;
-    margin:16px 0;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:12px; margin:10px 0;
   }
-  .panel h2{font-size:1.2rem; margin:0 0 12px; color:var(--accent-2)}
+  .panel h2{font-size:1.05rem; margin:0 0 8px; color:var(--accent-2)}
 
-  .group{margin:16px 0}
-  .group label.block{display:block; font-weight:600; margin-bottom:8px}
-  .checks{display:flex; flex-wrap:wrap; gap:10px}
-  .checks label{display:flex; align-items:center; gap:8px; padding:8px 12px; border:1px solid var(--border); border-radius:999px; background:#fff; cursor:pointer}
-  select{font:inherit; border:1px solid var(--border); border-radius:12px; padding:10px 12px; min-width:220px; background:#fff}
-  .hint{font-size:.92rem; color:var(--muted); margin-top:6px}
-  .divider{height:1px; background:var(--border); margin:18px 0}
+  /* Lignes compactes */
+  .row{display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap}
+  .col{flex:1 1 320px; min-width:260px}
+  .group{margin:8px 0}
+  .group label.block{display:block; font-weight:600; margin-bottom:4px; font-size:0.95rem}
+  select{font:inherit; border:1px solid var(--border); border-radius:10px; padding:8px 10px; min-width:220px; background:#fff}
+  .checks{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .pill{display:flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:#fff; white-space:nowrap}
+  .hint{font-size:.88rem; color:var(--muted); margin-top:4px}
+  .divider{height:1px; background:var(--border); margin:10px 0}
 
-  /* Ligne des gènes (3 blocs côte à côte) */
-  .genes-row{
-    display:grid;
-    grid-template-columns:repeat(3, minmax(220px,1fr));
-    gap:14px;
-  }
-  .gene{
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:12px;
-    background:#fff;
-  }
-  .gene .gene-title{font-weight:600; margin-bottom:8px; color:#5f4799; font-size:0.98rem}
+  /* Résultats compacts */
+  .out{background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:12px; margin:10px 0}
+  .section{margin:6px 0 8px}
+  .section h3{font-family:"Dancing Script",cursive; font-size:1.25rem; color:#7a5ab0; margin:4px 0}
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px}
+  .tag{display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:.93rem}
+  .ok{color:var(--ok)} .warn{color:var(--warn)} .muted{color:var(--muted)}
 
   /* Actions */
-  .actions{display:flex; gap:10px; flex-wrap:wrap; margin:12px 0 4px}
-  .btn{border:1px solid var(--accent); background:var(--accent); color:#fff; padding:10px 14px; border-radius:12px; cursor:pointer}
+  .actions{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 2px}
+  .btn{border:1px solid var(--accent); background:var(--accent); color:#fff; padding:8px 12px; border-radius:10px; cursor:pointer; font-size:0.95rem}
   .btn.secondary{background:#fff; color:#7a5ab0}
   .btn.ghost{background:#fff; color:#5a3b47; border-color:#eec6dc}
 
-  /* Résultats */
-  .out{background:#fff; border:1px solid var(--border); border-radius:18px; padding:18px; margin:16px 0}
-  .section{margin:10px 0 14px}
-  .section h3{font-family:"Dancing Script",cursive; font-size:1.4rem; color:#7a5ab0; margin:6px 0}
-  .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
-  .tag{display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:.95rem}
-  .ok{color:var(--ok)} .warn{color:var(--warn)} .muted{color:var(--muted)}
-
-  /* Erreur & Impression */
-  .error{padding:10px 12px; border:1px solid #f2c4c4; background:#fff0f0; color:var(--err); border-radius:12px; display:none; margin:10px 0}
-  @media print{
-    .no-print{display:none !important}
-    body{background:#fff}
-    .frame{border-color:#ccc; background:#fff}
+  /* Responsive (mobile -> colonne) */
+  @media (max-width:640px){
+    body{font-size:14px}
+    .col{flex:1 1 100%; min-width:100%}
+    select{min-width:unset; width:100%}
   }
-
-  /* Responsive */
-  @media (max-width: 960px){ .genes-row{grid-template-columns:repeat(2, minmax(200px,1fr))} }
-  @media (max-width: 640px){ .genes-row{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
 <div class="frame">
   <div class="wrap">
     <h1>De quelle couleur seront mes chatons ?</h1>
-    <p class="subtitle">Calculette génétique — patrons, couleurs, tabby, récessifs et gène roux.</p>
+    <p class="subtitle">Calculette génétique compacte — patrons, couleurs, tabby, porteurs et gène roux (M/F).</p>
 
-    <!-- ===== 1) PÈRE ===== -->
+    <!-- ===== PÈRE ===== -->
     <div class="panel" id="pere">
       <h2>Père</h2>
 
-      <!-- 1) Couleur -->
-      <div class="group">
-        <label for="pa_base" class="block">Couleur de base (phénotype)</label>
-        <select id="pa_base">
-          <option value="seal" selected>Seal</option>
-          <option value="blue">Blue</option>
-          <option value="chocolat">Chocolat</option>
-          <option value="lilac">Lilac</option>
-          <option value="cinnamon">Cinnamon</option>
-          <option value="fawn">Fawn</option>
-          <option value="roux">Roux</option>
-          <option value="creme">Crème</option>
-        </select>
-        <div class="hint">Le choix fixe les contraintes des porteurs (choco/cinna/dilution) et le statut roux.</div>
-      </div>
-
-      <!-- 2) Porteurs (gènes récessifs) -->
-      <div class="genes-row">
-        <div class="gene">
-          <div class="gene-title">Chocolat (B/b)</div>
-          <div class="checks">
-            <label><input type="checkbox" class="pa-choco-port"> Porteur (B b)</label>
+      <!-- Ligne compacte: Couleur + Porteurs -->
+      <div class="row">
+        <div class="col">
+          <div class="group">
+            <label for="pa_base" class="block">Couleur de base</label>
+            <select id="pa_base">
+              <option value="seal" selected>Seal</option>
+              <option value="blue">Blue</option>
+              <option value="chocolat">Chocolat</option>
+              <option value="lilac">Lilac</option>
+              <option value="cinnamon">Cinnamon</option>
+              <option value="fawn">Fawn</option>
+              <option value="roux">Roux</option>
+              <option value="creme">Crème</option>
+            </select>
           </div>
         </div>
-        <div class="gene">
-          <div class="gene-title">Cinnamon (B/bl)</div>
-          <div class="checks">
-            <label><input type="checkbox" class="pa-cinn-port"> Porteur (B bl)</label>
-          </div>
-        </div>
-        <div class="gene">
-          <div class="gene-title">Dilution (D/d)</div>
-          <div class="checks">
-            <label><input type="checkbox" class="pa-dil-port"> Porteur (Dd)</label>
+        <div class="col">
+          <div class="group">
+            <label class="block">Porteurs (récessifs)</label>
+            <div class="checks">
+              <label class="pill"><input type="checkbox" class="pa-choco-port"> Choco (B b)</label>
+              <label class="pill"><input type="checkbox" class="pa-cinn-port"> Cinna (B bl)</label>
+              <label class="pill"><input type="checkbox" class="pa-dil-port"> Dilution (Dd)</label>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 3) Tabby -->
-      <div class="group">
-        <label for="pa_tabby" class="block">Tabby (lynx)</label>
-        <select id="pa_tabby">
-          <option value="non" selected>Non</option>
-          <option value="oui">Oui</option>
-          <option value="oui_porteur_non_tabby">Oui porteur non tabby</option>
-        </select>
-      </div>
-
-      <!-- 4) Patron -->
-      <div class="group">
-        <label class="block">Patron (choix unique)</label>
-        <div class="checks" data-one="pa_motif">
-          <label><input type="checkbox" name="pa_motif" value="colourpoint"> Colourpoint</label>
-          <label><input type="checkbox" name="pa_motif" value="mitted"> Mitted</label>
-          <label><input type="checkbox" name="pa_motif" value="high_mitted"> High Mitted</label>
-          <label><input type="checkbox" name="pa_motif" value="bicolore"> Bicolore</label>
-          <label><input type="checkbox" name="pa_motif" value="mid_high_white"> Mid High White</label>
-          <label><input type="checkbox" name="pa_motif" value="van_high_white"> Van / High White</label>
+      <!-- Ligne compacte: Tabby + Patron -->
+      <div class="row">
+        <div class="col">
+          <div class="group">
+            <label for="pa_tabby" class="block">Tabby (lynx)</label>
+            <select id="pa_tabby">
+              <option value="non" selected>Non</option>
+              <option value="oui">Oui</option>
+              <option value="oui_porteur_non_tabby">Oui porteur non tabby</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="group">
+            <label for="pa_motif" class="block">Patron</label>
+            <select id="pa_motif">
+              <option value="" selected>— Sélectionner —</option>
+              <option value="colourpoint">Colourpoint</option>
+              <option value="mitted">Mitted</option>
+              <option value="high_mitted">High Mitted</option>
+              <option value="bicolore">Bicolore</option>
+              <option value="mid_high_white">Mid High White</option>
+              <option value="van_high_white">Van / High White</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- ===== 2) MÈRE ===== -->
+    <!-- ===== MÈRE ===== -->
     <div class="panel" id="mere">
       <h2>Mère</h2>
 
-      <!-- 1) Couleur -->
-      <div class="group">
-        <label for="pb_base" class="block">Couleur de base (phénotype)</label>
-        <select id="pb_base">
-          <!-- Non rousse -->
-          <option value="seal" selected>Seal</option>
-          <option value="blue">Blue</option>
-          <option value="chocolat">Chocolat</option>
-          <option value="lilac">Lilac</option>
-          <option value="cinnamon">Cinnamon</option>
-          <option value="fawn">Fawn</option>
-          <!-- Torties -->
-          <option value="seal_tortie">Seal Tortie</option>
-          <option value="blue_tortie">Blue Tortie</option>
-          <option value="chocolat_tortie">Chocolat Tortie</option>
-          <option value="lilac_tortie">Lilac Tortie</option>
-          <option value="cinnamon_tortie">Cinnamon Tortie</option>
-          <option value="fawn_tortie">Fawn Tortie</option>
-          <!-- Rousse / Crème -->
-          <option value="rousse">Rousse</option>
-          <option value="creme">Crème</option>
-        </select>
-        <div class="hint">Tortie = Oo, Rousse/Crème = OO (gène O).</div>
-      </div>
-
-      <!-- 2) Porteuses (gènes récessifs) -->
-      <div class="genes-row">
-        <div class="gene">
-          <div class="gene-title">Chocolat (B/b)</div>
-          <div class="checks">
-            <label><input type="checkbox" class="pb-choco-port"> Porteuse (B b)</label>
+      <!-- Ligne compacte: Couleur + Porteuses -->
+      <div class="row">
+        <div class="col">
+          <div class="group">
+            <label for="pb_base" class="block">Couleur de base</label>
+            <select id="pb_base">
+              <!-- Couleurs non rousses -->
+              <option value="seal" selected>Seal</option>
+              <option value="blue">Blue</option>
+              <option value="chocolat">Chocolat</option>
+              <option value="lilac">Lilac</option>
+              <option value="cinnamon">Cinnamon</option>
+              <option value="fawn">Fawn</option>
+              <!-- Torties -->
+              <option value="seal_tortie">Seal Tortie</option>
+              <option value="blue_tortie">Blue Tortie</option>
+              <option value="chocolat_tortie">Chocolat Tortie</option>
+              <option value="lilac_tortie">Lilac Tortie</option>
+              <option value="cinnamon_tortie">Cinnamon Tortie</option>
+              <option value="fawn_tortie">Fawn Tortie</option>
+              <!-- Rousse / Crème -->
+              <option value="rousse">Rousse</option>
+              <option value="creme">Crème</option>
+            </select>
           </div>
         </div>
-        <div class="gene">
-          <div class="gene-title">Cinnamon (B/bl)</div>
-          <div class="checks">
-            <label><input type="checkbox" class="pb-cinn-port"> Porteuse (B bl)</label>
-          </div>
-        </div>
-        <div class="gene">
-          <div class="gene-title">Dilution (D/d)</div>
-          <div class="checks">
-            <label><input type="checkbox" class="pb-dil-port"> Porteuse (Dd)</label>
+        <div class="col">
+          <div class="group">
+            <label class="block">Porteuses (récessifs)</label>
+            <div class="checks">
+              <label class="pill"><input type="checkbox" class="pb-choco-port"> Choco (B b)</label>
+              <label class="pill"><input type="checkbox" class="pb-cinn-port"> Cinna (B bl)</label>
+              <label class="pill"><input type="checkbox" class="pb-dil-port"> Dilution (Dd)</label>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 3) Tabby -->
-      <div class="group">
-        <label for="pb_tabby" class="block">Tabby (lynx)</label>
-        <select id="pb_tabby">
-          <option value="non" selected>Non</option>
-          <option value="oui">Oui</option>
-          <option value="oui_porteur_non_tabby">Oui porteur non tabby</option>
-        </select>
-      </div>
-
-      <!-- 4) Patron -->
-      <div class="group">
-        <label class="block">Patron (choix unique)</label>
-        <div class="checks" data-one="pb_motif">
-          <label><input type="checkbox" name="pb_motif" value="colourpoint"> Colourpoint</label>
-          <label><input type="checkbox" name="pb_motif" value="mitted"> Mitted</label>
-          <label><input type="checkbox" name="pb_motif" value="high_mitted"> High Mitted</label>
-          <label><input type="checkbox" name="pb_motif" value="bicolore"> Bicolore</label>
-          <label><input type="checkbox" name="pb_motif" value="mid_high_white"> Mid High White</label>
-          <label><input type="checkbox" name="pb_motif" value="van_high_white"> Van / High White</label>
+      <!-- Ligne compacte: Tabby + Patron -->
+      <div class="row">
+        <div class="col">
+          <div class="group">
+            <label for="pb_tabby" class="block">Tabby (lynx)</label>
+            <select id="pb_tabby">
+              <option value="non" selected>Non</option>
+              <option value="oui">Oui</option>
+              <option value="oui_porteur_non_tabby">Oui porteur non tabby</option>
+            </select>
+          </div>
+        </div>
+        <div class="col">
+          <div class="group">
+            <label for="pb_motif" class="block">Patron</label>
+            <select id="pb_motif">
+              <option value="" selected>— Sélectionner —</option>
+              <option value="colourpoint">Colourpoint</option>
+              <option value="mitted">Mitted</option>
+              <option value="high_mitted">High Mitted</option>
+              <option value="bicolore">Bicolore</option>
+              <option value="mid_high_white">Mid High White</option>
+              <option value="van_high_white">Van / High White</option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- ===== Actions ===== -->
-    <div class="actions no-print">
+    <!-- Actions -->
+    <div class="actions">
       <button class="btn" id="btn_calc">Prédire</button>
       <button class="btn secondary" id="btn_reset" type="button">Réinitialiser</button>
       <button class="btn ghost" id="btn_print" type="button">Imprimer</button>
     </div>
-    <div id="formError" class="error"></div>
+    <div id="formError" class="error" style="display:none"></div>
 
-    <!-- ===== 3) RÉSULTATS ===== -->
-    <div class="out" id="result">
+    <!-- Résultats -->
+    <div class="out">
       <div class="section" id="r_patron"><h3>Patrons</h3><div class="tags" id="motif"></div></div>
       <div class="section" id="r_couleurs"><h3>Couleurs de base</h3><div class="tags" id="basecolors"></div></div>
       <div class="section" id="r_tabby"><h3>Tabby</h3><div class="tags" id="tabby"></div></div>
@@ -264,44 +233,11 @@
 </div>
 
 <script>
-/* ===== UI de sélection unique pour Patron ===== */
-function enforceSingleCheckbox(groupAttr){
-  const box = document.querySelector('.checks[data-one="'+groupAttr+'"]');
-  if(!box) return;
-  box.addEventListener('change',(e)=>{
-    if(e.target.type==='checkbox' && e.target.checked){
-      box.querySelectorAll('input[type="checkbox"]').forEach(cb=>{ if(cb!==e.target) cb.checked=false; });
-    }
-  });
-}
-enforceSingleCheckbox('pa_motif');
-enforceSingleCheckbox('pb_motif');
+/* ===== Compact logic & genetics (bug Roux/Tortie corrigé) ===== */
 
-/* Exclusions entre porteurs (B-locus: choco vs cinnamon ne se cochent pas ensemble) */
-function setupCarrierLocks(){
-  [['pa','choco','cinn'],['pb','choco','cinn']].forEach(([p,a,b])=>{
-    const A=document.querySelector(`.${p}-${a}-port`);
-    const B=document.querySelector(`.${p}-${b}-port`);
-    if(A&&B){
-      A.addEventListener('change',()=>{ if(A.checked) B.checked=false; });
-      B.addEventListener('change',()=>{ if(B.checked) A.checked=false; });
-    }
-  });
-}
-setupCarrierLocks();
-
-/* ====== Couleur -> contraintes porteurs ======
-   Règles:
-   - Blue/Lilac/Fawn/Crème => dd exprimé -> porteur dilution (Dd) IMPOSSIBLE (désactivé).
-   - Lilac/Fawn => bb ou blbl exprimé -> porteur choco/cinna IMPOSSIBLE.
-   - Chocolat => bb exprimé -> porteur chocolat impossible.
-   - Cinnamon => blbl exprimé -> porteur cinnamon impossible.
-   - Roux/Rousse: O présent; D et B-locus possibles, donc on autorise porteurs choco/cinna/dilution SAUF si "Crème" (dd).
-   - Tortie (Oo): même contrainte D/B que la base sous-jacente (Seal/Blue/Choco/Lilac/Cinna/Fawn).
-*/
+/* Couleur -> contraintes porteurs (désactive les cases incohérentes) */
 function setDisabled(el, disabled){
-  el.disabled = disabled;
-  el.parentElement.style.opacity = disabled?0.55:1;
+  el.disabled = disabled; el.parentElement.style.opacity = disabled?0.55:1;
   if(disabled) el.checked=false;
 }
 function syncBaseToCarriers(prefix){
@@ -310,7 +246,6 @@ function syncBaseToCarriers(prefix){
   const cinn  = document.querySelector('.'+prefix+'-cinn-port');
   const dil   = document.querySelector('.'+prefix+'-dil-port');
 
-  // reset
   [choco,cinn,dil].forEach(el=>setDisabled(el,false));
 
   const isBlueLike = (v)=>['blue','lilac','fawn','creme','blue_tortie','lilac_tortie','fawn_tortie'].includes(v);
@@ -318,34 +253,17 @@ function syncBaseToCarriers(prefix){
   const isCinnaLike = (v)=>['cinnamon','cinnamon_tortie','fawn','fawn_tortie'].includes(v);
   const isCream     = (v)=>v==='creme';
 
-  if(isBlueLike(base)){ setDisabled(dil,true); }
-  if(isChocoLike(base)){ setDisabled(choco,true); }
-  if(isCinnaLike(base)){ setDisabled(cinn,true); }
-  if(isCream(base)){ setDisabled(dil,true); } // déjà couvert, on insiste visuellement
+  if(isBlueLike(base)) setDisabled(dil,true);   // dd exprimé -> pas porteur Dd
+  if(isChocoLike(base)) setDisabled(choco,true); // bb exprimé -> pas porteur choco
+  if(isCinnaLike(base)) setDisabled(cinn,true);  // blbl exprimé -> pas porteur cinna
+  if(isCream(base)) setDisabled(dil,true);
 }
 ['pa','pb'].forEach(p=>{
   document.getElementById(p+'_base').addEventListener('change', ()=>syncBaseToCarriers(p));
   syncBaseToCarriers(p); // init
 });
 
-/* ==== Lecture patrons ==== */
-function readMotif(name){
-  const boxes=[...document.querySelectorAll('input[name="'+name+'"]')];
-  const sel=boxes.find(cb=>cb.checked);
-  return sel?sel.value:null;
-}
-function renderTags(id, items){
-  const el=document.getElementById(id);
-  el.innerHTML = items && items.length ? items.map(x=>`<span class="tag ${x.cls||''}">${x.txt}</span>`).join('') : '<span class="tag muted">—</span>';
-}
-function requireMotifs(){
-  const pa=readMotif('pa_motif'), pb=readMotif('pb_motif');
-  const err=document.getElementById('formError');
-  if(!pa||!pb){ err.textContent='Erreur : sélectionne un patron pour chaque parent.'; err.style.display='block'; return null; }
-  err.style.display='none'; return {pa,pb};
-}
-
-/* ==== Patrons (sans fallback) ==== */
+/* Motifs (table officielle, sans fallback) */
 const P={COLOURPOINT:'colourpoint', MITTED:'mitted', HIGH_MITTED:'high_mitted', BICOLORE:'bicolore', MID_HIGH_WHITE:'mid_high_white', VAN:'van_high_white'};
 const motifRuleMap={
   [`${P.COLOURPOINT}|${P.COLOURPOINT}`]: {'Colourpoint':100},
@@ -392,35 +310,37 @@ const motifRuleMap={
 };
 function computeMotif(pa,pb){
   const key=`${pa}|${pb}`, alt=`${pb}|${pa}`;
-  const dist=motifRuleMap[key]||motifRuleMap[alt];
-  return dist?dist:null;
+  return motifRuleMap[key] || motifRuleMap[alt] || null;
 }
 
-/* ==== B/D à partir de la couleur (simplifié) ==== */
+/* B/D à partir de la couleur (phénotype -> génotype simplifié) */
 function baseToBDGenotype(base){
   const map={
-    seal:     {B:['B','B'], D:['D','D']},
-    blue:     {B:['B','B'], D:['d','d']},
-    chocolat: {B:['b','b'], D:['D','D']},
-    lilac:    {B:['b','b'], D:['d','d']},
-    cinnamon: {B:['bl','bl'], D:['D','D']},
-    fawn:     {B:['bl','bl'], D:['d','d']},
+    seal:{B:['B','B'],D:['D','D']},
+    blue:{B:['B','B'],D:['d','d']},
+    chocolat:{B:['b','b'],D:['D','D']},
+    lilac:{B:['b','b'],D:['d','d']},
+    cinnamon:{B:['bl','bl'],D:['D','D']},
+    fawn:{B:['bl','bl'],D:['d','d']},
 
-    seal_tortie:{B:['B','B'], D:['D','D']},
-    blue_tortie:{B:['B','B'], D:['d','d']},
-    chocolat_tortie:{B:['b','b'], D:['D','D']},
-    lilac_tortie:{B:['b','b'], D:['d','d']},
-    cinnamon_tortie:{B:['bl','bl'], D:['D','D']},
-    fawn_tortie:{B:['bl','bl'], D:['d','d']},
+    // Torties (Oo) : base "non-roux" sous-jacente
+    seal_tortie:{B:['B','B'],D:['D','D']},
+    blue_tortie:{B:['B','B'],D:['d','d']},
+    chocolat_tortie:{B:['b','b'],D:['D','D']},
+    lilac_tortie:{B:['b','b'],D:['d','d']},
+    cinnamon_tortie:{B:['bl','bl'],D:['D','D']},
+    fawn_tortie:{B:['bl','bl'],D:['d','d']},
 
-    roux:      {B:['B','B'], D:['D','D']},
-    creme:     {B:['B','B'], D:['d','d']},
-    rousse:    {B:['B','B'], D:['D','D']},
+    // Roux/Crème/Rousse : on masque la base pour le phénotype affiché,
+    // mais on garde des allèles "neutres" pour le calcul B/D
+    roux:{B:['B','B'],D:['D','D']},
+    creme:{B:['B','B'],D:['d','d']},
+    rousse:{B:['B','B'],D:['D','D']},
   };
   return map[base] || map.seal;
 }
 
-/* Porteurs depuis l’UI */
+/* Portage récessifs (via UI) */
 function carriersFromUI(prefix){
   return {
     choco: document.querySelector('.'+prefix+'-choco-port').checked,
@@ -434,10 +354,12 @@ function gametes(a1,a2){ return a1===a2?[[a1,1]]:[[a1,.5],[a2,.5]]; }
 function cross(gA,gB){
   const m=new Map();
   gA.forEach(([a,pA])=>gB.forEach(([b,pB])=>{
-    const pair=[a,b].sort().join('/'); m.set(pair,(m.get(pair)||0)+pA*pB);
+    const k=[a,b].sort().join('/'); m.set(k,(m.get(k)||0)+pA*pB);
   }));
-  return [...m.entries()].map(([pair,p])=>[[...pair.split('/')],p]);
+  return [...m.entries()].map(([k,p])=>[[...k.split('/')],p]);
 }
+
+/* Phénotype couleur à partir du B-locus + dilution */
 function phenotypeB(alleles){
   const set=new Set(alleles);
   if(set.has('B')) return 'Seal';
@@ -458,28 +380,17 @@ function applyDilution(base, d){
 function computeBaseColors(){
   const pa_base=document.getElementById('pa_base').value;
   const pb_base=document.getElementById('pb_base').value;
-
   const gA=baseToBDGenotype(pa_base);
   const gB=baseToBDGenotype(pb_base);
 
   const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
 
-  function injectCarriersB(Balleles, carriers){
-    let [x,y]=Balleles;
-    if(x==='B'&&y==='B'){
-      if(carriers.choco) y='b';
-      else if(carriers.cinn) y='bl';
-    }
-    return [x,y];
-  }
-  function injectCarriersD(Dalleles, carriers){
-    let [x,y]=Dalleles;
-    if(x==='D'&&y==='D' && carriers.dil) y='d';
-    return [x,y];
-  }
+  // Injecte les porteurs déclarés (B et D)
+  function injectB(B,car){ let [x,y]=B; if(x==='B'&&y==='B'){ if(car.choco) y='b'; else if(car.cinn) y='bl'; } return [x,y]; }
+  function injectD(D,car){ let [x,y]=D; if(x==='D'&&y==='D' && car.dil) y='d'; return [x,y]; }
 
-  const BA=injectCarriersB(gA.B, ca), DA=injectCarriersD(gA.D, ca);
-  const BB=injectCarriersB(gB.B, cb), DB=injectCarriersD(gB.D, cb);
+  const BA=injectB(gA.B,ca), DA=injectD(gA.D,ca);
+  const BB=injectB(gB.B,cb), DB=injectD(gB.D,cb);
 
   const kidsB=cross(gametes(BA[0],BA[1]), gametes(BB[0],BB[1]));
   const kidsD=cross(gametes(DA[0],DA[1]), gametes(DB[0],DB[1]));
@@ -499,25 +410,21 @@ function computeTabby(paTabby,pbTabby){
   if(gA==='aa'&&gB==='aa') out.push({txt:'100% non tabby.',cls:'muted'});
   else if((gA==='TT'&&gB==='aa')||(gA==='aa'&&gB==='TT')) out.push({txt:'100% tabby.',cls:'ok'});
   else if((gA==='Ta'&&gB==='aa')||(gA==='aa'&&gB==='Ta')) out.push({txt:'≈ 50% tabby / 50% non tabby.',cls:''});
-  else if((gA==='TT'&&gB==='Ta')||(gA==='Ta'&&gB==='TT')) out.push({txt:'100% tabby (au moins hétérozygotes).',cls:'ok'});
+  else if((gA==='TT'&&gB==='Ta')||(gA==='Ta'&&gB==='TT')) out.push({txt:'100% tabby (≥ hétérozygotes).',cls:'ok'});
   else if(gA==='TT'&&gB==='TT') out.push({txt:'100% tabby (homozygotes).',cls:'ok'});
   else if(gA==='Ta'&&gB==='Ta') out.push({txt:'≈ 75% tabby / 25% non tabby.',cls:''});
   return out;
 }
 
-/* Récessifs (affichage porteurs) */
+/* Portage récessifs : affichage simple "porteurs/non porteurs" */
 function carriersOutcome(Acar,Bcar,nom){
-  const lines=[];
-  if(Acar || Bcar) lines.push({txt:`${nom}: ≈ 50% porteurs / 50% non porteurs.`,cls:''});
-  else lines.push({txt:`${nom}: Non porteur attendu (sauf surprise généalogique).`,cls:'muted'});
-  return lines;
+  return [{txt: (Acar||Bcar)? `${nom}: ≈ 50% porteurs / 50% non porteurs.` : `${nom}: Non porteur attendu.`, cls: (Acar||Bcar)? '' : 'muted'}];
 }
 
-/* Gène O (Roux/Tortie) depuis les menus */
+/* Gène O (Roux/Tortie) dérivé des menus — ✅ bug corrigé */
 function maleOState(){
   const b=document.getElementById('pa_base').value;
-  if(b==='roux'||b==='creme') return 'O';
-  return 'o';
+  return (b==='roux'||b==='creme') ? 'O' : 'o';
 }
 function femaleOState(){
   const b=document.getElementById('pb_base').value;
@@ -526,45 +433,54 @@ function femaleOState(){
   return 'oo';
 }
 function computeRouxExplicitFromBase(){
-  const m=maleOState(), f=femaleOState();
-  let males='', females='';
+  const m = maleOState();
+  const f = femaleOState();
+  let males = '', females = '';
   if(m==='O' && f==='oo'){ males='0% roux / 100% non roux'; females='100% torties'; }
   else if(m==='O' && f==='Oo'){ males='50% roux / 50% non roux'; females='50% rousses / 50% torties'; }
   else if(m==='O' && f==='OO'){ males='100% roux'; females='100% rousses'; }
   else if(m==='o' && f==='oo'){ males='0% roux'; females='0% rousses/torties'; }
   else if(m==='o' && f==='Oo'){ males='50% roux / 50% non roux'; females='50% torties / 50% non rousses'; }
   else if(m==='o' && f==='OO'){ males='100% roux'; females='100% torties'; }
-  return [{txt:`Mâles : ${males}`},{txt:`Femelles : ${femelles}`}];
+  return [{txt:`Mâles : ${males}`},{txt:`Femelles : ${females}`}];
 }
 
-/* ==== Calcul global ==== */
-function onCalculate(){
-  const sel=requireMotifs(); if(!sel) return;
+/* Rendu tags utilitaire */
+function renderTags(id, items){
+  const el=document.getElementById(id);
+  el.innerHTML = items && items.length ? items.map(x=>`<span class="tag ${x.cls||''}">${x.txt}</span>`).join('') : '<span class="tag muted">—</span>';
+}
 
-  // Patrons
-  const dist=computeMotif(sel.pa, sel.pb);
-  const motifItems = dist ? Object.entries(dist).map(([k,v])=>({txt:`${k}: ${v}%`})) : [{txt:'Combinaison non définie.',cls:'warn'}];
+/* Calcul global */
+function onCalculate(){
+  const pa=document.getElementById('pa_motif').value;
+  const pb=document.getElementById('pb_motif').value;
+  const err=document.getElementById('formError');
+  if(!pa || !pb){
+    err.textContent='Sélectionne un patron pour chaque parent.'; err.style.display='block';
+  }else{
+    err.style.display='none';
+  }
+
+  const dist = (pa && pb) ? computeMotif(pa,pb) : null;
+  const motifItems = dist ? Object.entries(dist).map(([k,v])=>({txt:`${k}: ${v}%`})) : [{txt:'—',cls:'muted'}];
   renderTags('motif', motifItems);
 
-  // Couleurs (hors O)
   const colors=computeBaseColors();
-  renderTags('basecolors', colors.length ? colors.map(c=>({txt:`${c.color}: ${c.prob}%`})) : [{txt:'—',cls:'muted'}]);
+  renderTags('basecolors', colors.map(c=>({txt:`${c.color}: ${c.prob}%`})) );
 
-  // Tabby
   renderTags('tabby', computeTabby(
     document.getElementById('pa_tabby').value,
     document.getElementById('pb_tabby').value
   ));
 
-  // Récessifs porteurs
   const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
   let rec=[];
-  carriersOutcome(ca.choco, cb.choco, 'Chocolat').forEach(x=>rec.push(x));
-  carriersOutcome(ca.cinn,  cb.cinn,  'Cinnamon').forEach(x=>rec.push(x));
-  carriersOutcome(ca.dil,   cb.dil,   'Dilution').forEach(x=>rec.push(x));
+  rec.push(...carriersOutcome(ca.choco, cb.choco, 'Chocolat'));
+  rec.push(...carriersOutcome(ca.cinn,  cb.cinn,  'Cinnamon'));
+  rec.push(...carriersOutcome(ca.dil,   cb.dil,   'Dilution'));
   renderTags('recessifs', rec);
 
-  // Roux/Tortie (M/F)
   renderTags('roux', computeRouxExplicitFromBase());
 }
 
@@ -574,21 +490,14 @@ document.getElementById('btn_reset').addEventListener('click', ()=>{
   document.querySelectorAll('input[type="checkbox"]').forEach(cb=>{ cb.checked=false; cb.disabled=false; cb.parentElement.style.opacity=1; });
   document.getElementById('pa_base').value='seal'; document.getElementById('pb_base').value='seal';
   document.getElementById('pa_tabby').value='non'; document.getElementById('pb_tabby').value='non';
+  document.getElementById('pa_motif').value=''; document.getElementById('pb_motif').value='';
   ['motif','basecolors','tabby','recessifs','roux'].forEach(id=>document.getElementById(id).innerHTML='');
   document.getElementById('formError').style.display='none';
   syncBaseToCarriers('pa'); syncBaseToCarriers('pb');
 });
 document.getElementById('btn_print').addEventListener('click', ()=>window.print());
 
-/* Validation patrons obligatoires */
-function requireMotifs(){
-  const pa=readMotif('pa_motif'), pb=readMotif('pb_motif');
-  const err=document.getElementById('formError');
-  if(!pa||!pb){ err.textContent='Erreur : sélectionne un patron pour chaque parent.'; err.style.display='block'; return null; }
-  err.style.display='none'; return {pa,pb};
-}
-
-/* Init */
+/* Premier rendu */
 onCalculate();
 </script>
 </body>
