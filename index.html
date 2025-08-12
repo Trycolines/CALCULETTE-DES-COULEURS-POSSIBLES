@@ -354,7 +354,7 @@ function applyDilution(base, d){
   return base;
 }
 
-/* ====== Injection porteurs (correctif b/b -> b/bl si "cinn" coché) ====== */
+/* ====== Injection porteurs (inclut chocolat b/b -> b/bl si "cinn" coché) ====== */
 function injectB(B,car){
   let [x,y] = B;
   if (car.choco) { if (x==='B' && y==='B') y='b'; }
@@ -399,9 +399,12 @@ function computeTabby(paTabby,pbTabby){
   return out;
 }
 
-/* ====== Résumés récessifs & gène O ====== */
-function carriersOutcome(Acar,Bcar,nom){
-  return [{txt: (Acar||Bcar)? `${nom}: ≈ 50% porteurs / 50% non porteurs.` : `${nom}: Non porteur attendu.`, cls: (Acar||Bcar)? '' : 'muted'}];
+/* ====== Récessifs (porteurs uniquement) & gène O ====== */
+function carriersOutcome(Acar, Bcar, nom){
+  // Si aucun parent n'est porteur -> n'affiche rien
+  if (!Acar && !Bcar) return [];
+  // Au moins un parent porteur -> modèle simple ≈ 50/50
+  return [{ txt: `${nom}: ≈ 50% porteurs / 50% non porteurs.` }];
 }
 function maleOState(){ const b=document.getElementById('pa_base').value; return (b==='roux'||b==='creme') ? 'O' : 'o'; }
 function femaleOState(){
@@ -411,14 +414,15 @@ function femaleOState(){
   return 'oo';
 }
 function computeRouxExplicitFromBase(){
-  const m = maleOState(), f = femaleOState(); let males='', females='';
+  const m = maleOState(), f = femaleOState();
+  let males = '', females = '';
   if(m==='O' && f==='oo'){ males='0% roux / 100% non roux'; females='100% torties'; }
   else if(m==='O' && f==='Oo'){ males='50% roux / 50% non roux'; females='50% rousses / 50% torties'; }
   else if(m==='O' && f==='OO'){ males='100% roux'; females='100% rousses'; }
   else if(m==='o' && f==='oo'){ males='0% roux'; females='0% rousses/torties'; }
   else if(m==='o' && f==='Oo'){ males='50% roux / 50% non roux'; females='50% torties / 50% non rousses'; }
   else if(m==='o' && f==='OO'){ males='100% roux'; females='100% torties'; }
-  return [{txt:`Mâles : ${males}`},{txt:`Femelles : ${femelles}`}];
+  return [{txt:`Mâles : ${males}`},{txt:`Femelles : ${females}`}]; /* ✅ 'females' correct */
 }
 
 /* ====== Calcul global ====== */
@@ -445,7 +449,8 @@ function onCalculate(){
   rec.push(...carriersOutcome(ca.choco, cb.choco, 'Chocolat'));
   rec.push(...carriersOutcome(ca.cinn,  cb.cinn,  'Cinnamon'));
   rec.push(...carriersOutcome(ca.dil,   cb.dil,   'Dilution'));
-  renderTags('recessifs', rec);
+  // Filtrer pour n'afficher que ce qui existe
+  renderTags('recessifs', rec.filter(Boolean));
 
   renderTags('roux', computeRouxExplicitFromBase());
 }
@@ -463,7 +468,7 @@ document.getElementById('btn_reset').addEventListener('click', ()=>{
 });
 document.getElementById('btn_print').addEventListener('click', ()=>window.print());
 
-/* Premier rendu (au cas où) */
+/* Premier rendu */
 onCalculate();
 </script>
 </body>
