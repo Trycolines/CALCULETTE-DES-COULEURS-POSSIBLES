@@ -409,20 +409,23 @@ function femaleOState(){
   return 'oo';
 }
 function splitRed(totalRed, pdd){
-  const cream = round1(totalRed * pdd / 100);
-  const red   = round1(totalRed - cream);
-  if(totalRed===0) return '';
-  if(cream===0)    return `${red}% Red`;
-  if(red===0)      return `${cream}% Cream`;
-  return `${red}% Red / ${cream}% Cream`;
+  if (totalRed <= 0) return '';
+  const cream = Math.round(totalRed * pdd) / 100;
+  const red   = Math.round((totalRed - cream) * 10) / 10;
+  const cr    = Math.round(cream * 10) / 10;
+  if (cr === 0) return `${red}% Red`;
+  if (red === 0) return `${cr}% Cream`;
+  return `${red}% Red / ${cr}% Cream`;
 }
 function splitTortie(totalTortie, pdd){
-  const creamT = round1(totalTortie * pdd / 100);
-  const tortie = round1(totalTortie - creamT);
-  if(totalTortie===0) return '';
-  if(creamT===0)      return `${tortie}% Torties`;
-  if(tortie===0)      return `${creamT}% Cream-torties`;
-  return `${tortie}% Torties / ${creamT}% Cream-torties`;
+  if (totalTortie <= 0) return '';
+  const creamT = Math.round(totalTortie * pdd) / 100;
+  const tortie = Math.round((totalTortie - creamT) * 10) / 10;
+  const crT    = Math.round(creamT * 10) / 10;
+  if (crT === 0) return `${tortie}% Torties`;
+  if (tortie === 0) return `${crT}% Cream-torties`;
+  return `${tortie}% Torties / ${crT}% Cream-torties`;
+}
 }
 /* distribue la part non-roux selon les couleurs de base possibles */
 function formatNonRedLine(label, nonRedPct){
@@ -433,32 +436,26 @@ function formatNonRedLine(label, nonRedPct){
   return parts.length ? `${label} : ${parts.join(' / ')}` : '';
 }
 function computeRouxExplicitFromBase(){
-  const m = maleOState(), f = femaleOState();
-  const pdd = ddPercent();
+  const m = maleOState();   // 'O' ou 'o'
+  const f = femaleOState(); // 'OO', 'Oo' ou 'oo'
+  const pdd = ddPercent();  // % dd global => Red -> Cream
 
   let malesRed=0, femalesRed=0, femalesTortie=0;
   if(m==='O' && f==='oo'){malesRed=100; femalesTortie=100;}
   else if(m==='O' && f==='Oo'){malesRed=100; femalesRed=50; femalesTortie=50;}
   else if(m==='O' && f==='OO'){malesRed=100; femalesRed=100;}
-  else if(m==='o' && f==='oo'){malesRed=0;   femalesRed=0;  femalesTortie=0;}
-  else if(m==='o' && f==='Oo'){malesRed=50;  femalesTortie=50;}
+  else if(m==='o' && f==='oo'){malesRed=0; femalesRed=0; femalesTortie=0;}
+  else if(m==='o' && f==='Oo'){malesRed=50; femalesTortie=50;}
   else if(m==='o' && f==='OO'){malesRed=100; femalesTortie=100;}
 
-  const mNonRed = round1(100 - malesRed);
-  const fNonRed = round1(100 - (femalesRed + femalesTortie));
-
   const out=[];
-  const mNon = formatNonRedLine('Mâles non-roux', mNonRed);
   const mRed = splitRed(malesRed, pdd);
-  const fNon = formatNonRedLine('Femelles non-rousses', fNonRed);
   const fRed = splitRed(femalesRed, pdd);
   const fTor = splitTortie(femalesTortie, pdd);
 
-  if(mNon) out.push({txt:mNon});
-  if(mRed) out.push({txt:'Mâles : '+mRed});
-  if(fNon) out.push({txt:fNon});
-  if(fRed) out.push({txt:'Femelles : '+fRed});
-  if(fTor) out.push({txt:'Femelles : '+fTor});
+  if (mRed) out.push({txt:`Mâles : ${mRed}`});
+  if (fRed) out.push({txt:`Femelles : ${fRed}`});
+  if (fTor) out.push({txt:`Femelles : ${fTor}`});
   return out;
 }
 
