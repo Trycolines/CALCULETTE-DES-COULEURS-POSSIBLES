@@ -40,7 +40,7 @@
 
   .out{background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:12px; margin:10px 0}
   .section{margin:6px 0 8px}
-  .section h3{font-family:"Dancing+Script",cursive; font-size:1.25rem; color:#7a5ab0; margin:4px 0}
+  .section h3{font-family:"Dancing Script",cursive; font-size:1.25rem; color:#7a5ab0; margin:4px 0}
   .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px}
   .tag{display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:.93rem}
   .ok{color:#167f5d} .muted{color:var(--muted)}
@@ -60,7 +60,6 @@
 <body>
 <div class="frame">
   <div class="wrap">
-    
 
     <!-- ===== PÈRE ===== -->
     <div class="panel" id="pere">
@@ -383,9 +382,18 @@ function computeTabby(paTabby,pbTabby){
 }
 
 /* ===== Récessifs (porteurs seulement) ===== */
-function carriersOutcome(Acar,Bcar,nom){
-  if(!Acar && !Bcar) return [];
-  return [{txt:`${nom}: ≈ 50% porteurs / 50% non porteurs.`}];
+// a = parent A porteur ?, b = parent B porteur ?
+function carriersOutcome(a, b, nom){
+  // Cas spécial Dilution : Dd × Dd => 25% dd / 50% Dd / 25% DD
+  if(nom === 'Dilution' && a && b){
+    return [{ txt: 'Dilution : ≈ 25% dilués / 50% porteurs / 25% non porteurs.' }];
+  }
+  // Cas général : si au moins un parent porteur
+  if(a || b){
+    return [{ txt: `${nom} : ≈ 50% porteurs / 50% non porteurs.` }];
+  }
+  // Sinon on n'affiche rien
+  return [];
 }
 
 /* ===== Gène O : Red/Cream & Torties (split par dd) ===== */
@@ -412,23 +420,42 @@ function splitTortie(totalTortie, pdd){
   if(tortie===0)      return `${creamT}% Cream-torties`;
   return `${tortie}% Torties / ${creamT}% Cream-torties`;
 }
+
+/* --- helper : distribue la part non-roux selon les couleurs de base calculées --- */
+function formatNonRedLine(label, nonRedPct){
+  const dist = computeBaseColors(); // [{color:'Seal', prob:50}, {color:'Blue', prob:50}, ...]
+  if(nonRedPct <= 0.0001) return `${label} : 0%`;
+  const parts = dist.map(d => `${round1(d.prob * nonRedPct / 100)}% ${d.color}`)
+                    .filter(t => !/^0(\.0)?%/.test(t));
+  return `${label} : ${parts.join(' / ')}`;
+}
+
+/* --- version corrigée qui affiche aussi les non-roux/non-rousses --- */
 function computeRouxExplicitFromBase(){
-  const m=maleOState(), f=femaleOState();
-  const pdd=ddPercent();
+  const m = maleOState();      // 'O' ou 'o'
+  const f = femaleOState();    // 'OO', 'Oo' ou 'oo'
+  const pdd = ddPercent();     // % dd global => Red -> Cream
 
+  // Parts brutes (avant dilution) par sexe
   let malesRed=0, femalesRed=0, femalesTortie=0;
-  if(m==='O' && f==='oo'){ malesRed=100; femalesTortie=100; }
-  else if(m==='O' && f==='Oo'){ malesRed=100; femalesRed=50; femalesTortie=50; }
-  else if(m==='O' && f==='OO'){ malesRed=100; femalesRed=100; }
-  else if(m==='o' && f==='oo'){ malesRed=0; femalesRed=0; femalesTortie=0; }
-  else if(m==='o' && f==='Oo'){ malesRed=50; femalesTortie=50; }
-  else if(m==='o' && f==='OO'){ malesRed=100; femalesTortie=100; }
+  if(m==='O' && f==='oo'){malesRed=100; femalesTortie=100;}
+  else if(m==='O' && f==='Oo'){malesRed=100; femalesRed=50; femalesTortie=50;}
+  else if(m==='O' && f==='OO'){malesRed=100; femalesRed=100;}
+  else if(m==='o' && f==='oo'){malesRed=0;   femalesRed=0;  femalesTortie=0;}
+  else if(m==='o' && f==='Oo'){malesRed=50;  femalesTortie=50;}
+  else if(m==='o' && f==='OO'){malesRed=100; femalesTortie=100;}
 
-  const maleLine   = `Mâles : ${splitRed(malesRed, pdd)}`;
+  const mNonRed = round1(100 - malesRed);
+  const fNonRed = round1(100 - (femalesRed + femalesTortie));
+
+  const maleLine =
+    `${formatNonRedLine('Mâles non-roux', mNonRed)} — Roux : ${splitRed(malesRed, pdd)}`;
+
   const femaleBits = [];
-  if(femalesRed>0)    femaleBits.push(splitRed(femalesRed, pdd));
-  if(femalesTortie>0) femaleBits.push(splitTortie(femalesTortie, pdd));
-  const femaleLine = `Femelles : ${femaleBits.length? femaleBits.join(' + ') : '0% Red/Torties'}`;
+  femaleBits.push(formatNonRedLine('Femelles non-rousses', fNonRed));
+  if(femalesRed>0)    femaleBits.push(`Rousses : ${splitRed(femalesRed, pdd)}`);
+  if(femalesTortie>0) femaleBits.push(`Torties : ${splitTortie(femalesTortie, pdd)}`);
+  const femaleLine = femaleBits.join(' — ');
 
   return [{txt:maleLine},{txt:femaleLine}];
 }
