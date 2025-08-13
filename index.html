@@ -417,6 +417,7 @@ function splitRed(totalRed, pdd){
   if (red === 0) return `${cr}% Cream`;
   return `${red}% Red / ${cr}% Cream`;
 }
+
 function splitTortie(totalTortie, pdd){
   if (totalTortie <= 0) return '';
   const creamT = Math.round(totalTortie * pdd) / 100;
@@ -426,7 +427,9 @@ function splitTortie(totalTortie, pdd){
   if (tortie === 0) return `${crT}% Cream-torties`;
   return `${tortie}% Torties / ${crT}% Cream-torties`;
 }
-}
+
+// (optionnel) tu peux supprimer la fonction formatNonRedLine si tu veux
+
 /* distribue la part non-roux selon les couleurs de base possibles */
 function formatNonRedLine(label, nonRedPct){
   const dist = computeBaseColors();
