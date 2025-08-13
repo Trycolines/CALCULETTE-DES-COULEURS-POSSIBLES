@@ -8,12 +8,12 @@
 <style>
   :root{
     --page-bg:#ffffff;
-    --frame-bg:#FAF3F7;      /* rose très doux */
-    --frame-border:#D6B3E0;  /* lilac pastel */
+    --frame-bg:#FAF3F7;
+    --frame-border:#D6B3E0;
     --panel:#ffffff;
-    --border:#e9defc;        /* lilac clair interne */
-    --accent:#6b4ea3;        /* lilac soutenu */
-    --accent-2:#d37fb2;      /* rose accent */
+    --border:#e9defc;
+    --accent:#6b4ea3;
+    --accent-2:#d37fb2;
     --ink:#26233a; --muted:#6b6a75;
     --radius:14px;
   }
@@ -22,32 +22,30 @@
   .frame{max-width:980px; margin:18px auto; background:var(--frame-bg);
     border:2px solid var(--frame-border); border-radius:16px; padding:14px;}
   .wrap{max-width:940px; margin:0 auto}
-  h1{font-family:"Dancing Script",cursive; font-size:2.1rem; margin:0 0 4px; color:var(--accent)}
-  .subtitle{margin:0 0 12px; color:#87518a; font-size:0.98rem}
 
   .panel{background:var(--panel); border:1px solid var(--border);
     border-radius:var(--radius); padding:12px; margin:10px 0;}
-  .panel h2{font-size:1.05rem; margin:0 0 8px; color:var(--accent-2)}
+  .panel h2{font-size:1rem; margin:0 0 6px; color:var(--accent-2); font-weight:700}
 
   .row{display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap}
   .col{flex:1 1 320px; min-width:260px}
-  .group{margin:8px 0}
-  .group label.block{display:block; font-weight:600; margin-bottom:4px; font-size:0.95rem}
-  select{font:inherit; border:1px solid var(--border); border-radius:10px; padding:8px 10px; min-width:220px; background:#fff}
+  .group{margin:6px 0}
+  .group label.block{display:block; font-weight:600; margin-bottom:4px; font-size:.95rem}
+  select{font:inherit; border:1px solid var(--border); border-radius:10px; padding:6px 10px; min-width:220px; background:#fff}
   .checks{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
-  .pill{display:flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:#fff; white-space:nowrap}
-
-  .out{background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:12px; margin:10px 0}
-  .section{margin:6px 0 8px}
-  .section h3{font-family:"Dancing Script",cursive; font-size:1.25rem; color:#7a5ab0; margin:4px 0}
-  .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px}
-  .tag{display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:.93rem}
-  .ok{color:#167f5d} .muted{color:var(--muted)}
+  .pill{display:flex; align-items:center; gap:6px; padding:5px 10px; border:1px solid var(--border); border-radius:999px; background:#fff; white-space:nowrap}
 
   .actions{display:flex; gap:8px; flex-wrap:wrap; margin:8px 0 2px}
-  .btn{border:1px solid var(--accent); background:var(--accent); color:#fff; padding:8px 12px; border-radius:10px; cursor:pointer; font-size:0.95rem}
+  .btn{border:1px solid var(--accent); background:var(--accent); color:#fff; padding:7px 12px; border-radius:10px; cursor:pointer; font-size:.95rem}
   .btn.secondary{background:#fff; color:#7a5ab0}
   .btn.ghost{background:#fff; color:#5a3b47; border-color:#eec6dc}
+
+  .out{background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:10px; margin:10px 0}
+  .section{margin:6px 0 8px}
+  .section h3{font-family:"Dancing Script",cursive; font-size:1.15rem; color:#7a5ab0; margin:2px 0}
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px}
+  .tag{display:inline-block; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#fff; font-size:.92rem}
+  .ok{color:#167f5d} .muted{color:var(--muted)}
 
   @media (max-width:640px){
     body{font-size:14px}
@@ -83,9 +81,9 @@
           <div class="group">
             <label class="block">Porteurs (récessifs)</label>
             <div class="checks">
-              <label class="pill"><input type="checkbox" class="pa-choco-port"> Chocolate (B b)</label>
-              <label class="pill"><input type="checkbox" class="pa-cinn-port"> Cinnamon (B bl)</label>
-              <label class="pill"><input type="checkbox" class="pa-dil-port"> Dilution (D d)</label>
+              <label class="pill"><input type="checkbox" class="pa-choco-port"> Chocolate (b)</label>
+              <label class="pill"><input type="checkbox" class="pa-cinn-port"> Cinnamon (bl)</label>
+              <label class="pill"><input type="checkbox" class="pa-dil-port"> Dilution (d)</label>
             </div>
           </div>
         </div>
@@ -147,9 +145,9 @@
           <div class="group">
             <label class="block">Porteuses (récessifs)</label>
             <div class="checks">
-              <label class="pill"><input type="checkbox" class="pb-choco-port"> Chocolate (B b)</label>
-              <label class="pill"><input type="checkbox" class="pb-cinn-port"> Cinnamon (B bl)</label>
-              <label class="pill"><input type="checkbox" class="pb-dil-port"> Dilution (D d)</label>
+              <label class="pill"><input type="checkbox" class="pb-choco-port"> Chocolate (b)</label>
+              <label class="pill"><input type="checkbox" class="pb-cinn-port"> Cinnamon (bl)</label>
+              <label class="pill"><input type="checkbox" class="pb-dil-port"> Dilution (d)</label>
             </div>
           </div>
         </div>
@@ -192,11 +190,11 @@
 
     <!-- Résultats -->
     <div class="out">
-      <div class="section" id="r_patron"><h3>Patrons</h3><div class="tags" id="motif"></div></div>
-      <div class="section" id="r_couleurs"><h3>Couleurs de base</h3><div class="tags" id="basecolors"></div></div>
-      <div class="section" id="r_tabby"><h3>Tabby</h3><div class="tags" id="tabby"></div></div>
-      <div class="section" id="r_recessifs"><h3>Récessifs (porteurs)</h3><div class="tags" id="recessifs"></div></div>
-      <div class="section" id="r_roux"><h3>Red / Tortie (répartition M/F)</h3><div class="tags" id="roux"></div></div>
+      <div class="section" id="sec_patron"><h3>Patrons</h3><div class="tags" id="motif"></div></div>
+      <div class="section" id="sec_couleurs"><h3>Couleurs de base</h3><div class="tags" id="basecolors"></div></div>
+      <div class="section" id="sec_tabby"><h3>Tabby</h3><div class="tags" id="tabby"></div></div>
+      <div class="section" id="sec_recessifs"><h3>Récessifs (porteurs)</h3><div class="tags" id="recessifs"></div></div>
+      <div class="section" id="sec_roux"><h3>Red / Tortie (répartition M/F)</h3><div class="tags" id="roux"></div></div>
     </div>
   </div>
 </div>
@@ -204,8 +202,20 @@
 <script>
 /* ===== utilitaires ===== */
 function setDisabled(el, disabled){ el.disabled=disabled; el.parentElement.style.opacity=disabled?0.55:1; if(disabled) el.checked=false; }
-function renderTags(id, items){ const el=document.getElementById(id); el.innerHTML=(items&&items.length)? items.map(x=>`<span class="tag ${x.cls||''}">${x.txt}</span>`).join(''):'<span class="tag muted">—</span>'; }
 function round1(x){ return Math.round(x*10)/10; }
+
+/* Affiche des tags ou masque la section si vide */
+function renderTagsOrHide(sectionId, tagsId, items){
+  const sec=document.getElementById(sectionId);
+  const box=document.getElementById(tagsId);
+  if(items && items.length){
+    box.innerHTML = items.map(x=>`<span class="tag ${x.cls||''}">${x.txt}</span>`).join('');
+    sec.style.display='';
+  }else{
+    box.innerHTML='';
+    sec.style.display='none';
+  }
+}
 
 /* ===== cohérence porteurs ===== */
 function syncBaseToCarriers(prefix){
@@ -331,7 +341,6 @@ function applyDilution(base, d){
   if(base==='Cinnamon') return 'Fawn';
   return base;
 }
-/* injection porteurs (inclut chocolate b/b -> b/bl si 'cinn' coché) */
 function injectB(B,car){ let [x,y]=B;
   if(car.choco){ if(x==='B'&&y==='B') y='b'; }
   if(car.cinn){ if(x==='B'&&y==='B') y='bl'; else if(x==='b'&&y==='b') y='bl'; }
@@ -355,41 +364,17 @@ function computeBaseColors(){
   }));
   return [...tally.entries()].map(([c,p])=>({color:c,prob:round1(p*100)})).sort((a,b)=>b.prob-a.prob);
 }
-
-/* ===== RÉPARTITIONS PRÉCISES SUR LES RÉCESSIFS ===== */
-// Dilution : renvoie % dd / % Dd / % DD (arrondis 0,1)
-function dilutionBreakdown(){
+/* probabilité dd globale (pour Red->Cream) */
+function ddPercent(){
   const pa_base=document.getElementById('pa_base').value;
   const pb_base=document.getElementById('pb_base').value;
   const gA=baseToBDGenotype(pa_base), gB=baseToBDGenotype(pb_base);
   const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
   const DA=injectD(gA.D,ca), DB=injectD(gB.D,cb);
   const kidsD=cross(gametes(DA[0],DA[1]), gametes(DB[0],DB[1]));
-  let dd=0, Dd=0, DD=0;
-  kidsD.forEach(([d,w])=>{
-    const set=new Set(d);
-    if(set.has('d') && set.size===1) dd+=w;      // dd
-    else if(set.has('d') && set.has('D')) Dd+=w; // Dd
-    else DD+=w;                                  // DD
-  });
-  return { dd:round1(dd*100), Dd:round1(Dd*100), DD:round1(DD*100) };
+  let p=0; kidsD.forEach(([d,w])=>{ if(d[0]==='d'&&d[1]==='d') p+=w; });
+  return round1(p*100);
 }
-// Retourne, pour le locus B, la part "porteurs" d'un allèle cible ('b' ou 'bl')
-function bBreakdown(target){
-  const pa_base=document.getElementById('pa_base').value;
-  const pb_base=document.getElementById('pb_base').value;
-  const gA=baseToBDGenotype(pa_base), gB=baseToBDGenotype(pb_base);
-  const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
-  const BA=injectB(gA.B,ca), BB=injectB(gB.B,cb);
-  const kidsB=cross(gametes(BA[0],BA[1]), gametes(BB[0],BB[1]));
-  let carriers=0;
-  kidsB.forEach(([b,w])=>{ const s=new Set(b); if(s.has(target)) carriers+=w; });
-  const c=round1(carriers*100);
-  return { carriers:c, non:round1(100-c) };
-}
-
-/* probabilité dd globale (pour Red->Cream) */
-function ddPercent(){ return dilutionBreakdown().dd; }
 
 /* ===== Tabby ===== */
 function computeTabby(paTabby,pbTabby){
@@ -404,21 +389,15 @@ function computeTabby(paTabby,pbTabby){
   return out;
 }
 
-/* ===== Récessifs (porteurs — calculs réels) ===== */
-function carriersOutcome(nom){
-  if(nom==='Dilution'){
-    const br=dilutionBreakdown();
-    return [{ txt:`Dilution : ≈ ${br.dd}% dilués / ${br.Dd}% porteurs / ${br.DD}% non porteurs.` }];
+/* ===== Récessifs (porteurs seulement) ===== */
+function carriersOutcome(a, b, nom){
+  if(nom === 'Dilution' && a && b){
+    return [{ txt: 'Dilution : ≈ 25% dilués / 50% porteurs / 25% non porteurs.' }];
   }
-  if(nom==='Chocolate'){
-    const br=bBreakdown('b');
-    return [{ txt:`Chocolate : ≈ ${br.carriers}% porteurs / ${br.non}% non porteurs.` }];
+  if(a || b){
+    return [{ txt: `${nom} : ≈ 50% porteurs / 50% non porteurs.` }];
   }
-  if(nom==='Cinnamon'){
-    const br=bBreakdown('bl');
-    return [{ txt:`Cinnamon : ≈ ${br.carriers}% porteurs / ${br.non}% non porteurs.` }];
-  }
-  return [];
+  return []; // rien d’affiché si impossible
 }
 
 /* ===== Gène O : Red/Cream & Torties (split par dd) ===== */
@@ -432,7 +411,7 @@ function femaleOState(){
 function splitRed(totalRed, pdd){
   const cream = round1(totalRed * pdd / 100);
   const red   = round1(totalRed - cream);
-  if(totalRed===0) return '0% Red';
+  if(totalRed===0) return '';
   if(cream===0)    return `${red}% Red`;
   if(red===0)      return `${cream}% Cream`;
   return `${red}% Red / ${cream}% Cream`;
@@ -440,42 +419,47 @@ function splitRed(totalRed, pdd){
 function splitTortie(totalTortie, pdd){
   const creamT = round1(totalTortie * pdd / 100);
   const tortie = round1(totalTortie - creamT);
-  if(totalTortie===0) return '0% Torties';
+  if(totalTortie===0) return '';
   if(creamT===0)      return `${tortie}% Torties`;
   if(tortie===0)      return `${creamT}% Cream-torties`;
   return `${tortie}% Torties / ${creamT}% Cream-torties`;
 }
-/* helper : répartir les non-roux selon la distribution des bases */
+/* distribue la part non-roux selon les couleurs de base possibles */
 function formatNonRedLine(label, nonRedPct){
   const dist = computeBaseColors();
-  if(nonRedPct <= 0.0001) return `${label} : 0%`;
+  if(nonRedPct <= 0.0001) return '';
   const parts = dist.map(d => `${round1(d.prob * nonRedPct / 100)}% ${d.color}`)
                     .filter(t => !/^0(\.0)?%/.test(t));
-  return `${label} : ${parts.join(' / ')}`;
+  return parts.length ? `${label} : ${parts.join(' / ')}` : '';
 }
 function computeRouxExplicitFromBase(){
-  const m = maleOState();
-  const f = femaleOState();
+  const m = maleOState(), f = femaleOState();
   const pdd = ddPercent();
 
   let malesRed=0, femalesRed=0, femalesTortie=0;
   if(m==='O' && f==='oo'){malesRed=100; femalesTortie=100;}
   else if(m==='O' && f==='Oo'){malesRed=100; femalesRed=50; femalesTortie=50;}
   else if(m==='O' && f==='OO'){malesRed=100; femalesRed=100;}
-  else if(m==='o' && f==='oo'){malesRed=0; femalesRed=0; femalesTortie=0;}
-  else if(m==='o' && f==='Oo'){malesRed=50; femalesTortie=50;}
+  else if(m==='o' && f==='oo'){malesRed=0;   femalesRed=0;  femalesTortie=0;}
+  else if(m==='o' && f==='Oo'){malesRed=50;  femalesTortie=50;}
   else if(m==='o' && f==='OO'){malesRed=100; femalesTortie=100;}
 
   const mNonRed = round1(100 - malesRed);
   const fNonRed = round1(100 - (femalesRed + femalesTortie));
 
-  const maleLine = `${formatNonRedLine('Mâles non-roux', mNonRed)} — Roux : ${splitRed(malesRed, pdd)}`;
-  const femaleBits = [];
-  femaleBits.push(formatNonRedLine('Femelles non-rousses', fNonRed));
-  if(femalesRed>0)    femaleBits.push(`Rousses : ${splitRed(femalesRed, pdd)}`);
-  if(femalesTortie>0) femaleBits.push(`Torties : ${splitTortie(femalesTortie, pdd)}`);
+  const out=[];
+  const mNon = formatNonRedLine('Mâles non-roux', mNonRed);
+  const mRed = splitRed(malesRed, pdd);
+  const fNon = formatNonRedLine('Femelles non-rousses', fNonRed);
+  const fRed = splitRed(femalesRed, pdd);
+  const fTor = splitTortie(femalesTortie, pdd);
 
-  return [{txt:maleLine},{txt:femaleBits.join(' — ')}];
+  if(mNon) out.push({txt:mNon});
+  if(mRed) out.push({txt:'Mâles : '+mRed});
+  if(fNon) out.push({txt:fNon});
+  if(fRed) out.push({txt:'Femelles : '+fRed});
+  if(fTor) out.push({txt:'Femelles : '+fTor});
+  return out;
 }
 
 /* ===== Calcul global ===== */
@@ -487,24 +471,23 @@ function onCalculate(){
   else { err.style.display='none'; }
 
   const dist=(pa&&pb)?computeMotif(pa,pb):null;
-  renderTags('motif', dist? Object.entries(dist).map(([k,v])=>({txt:`${k}: ${v}%`})) : []);
+  renderTagsOrHide('sec_patron','motif', dist? Object.entries(dist).map(([k,v])=>({txt:`${k}: ${v}%`})) : []);
 
   const colors=computeBaseColors();
-  renderTags('basecolors', colors.map(c=>({txt:`${c.color}: ${c.prob}%`})) );
+  renderTagsOrHide('sec_couleurs','basecolors', colors.map(c=>({txt:`${c.color}: ${c.prob}%`})) );
 
-  renderTags('tabby', computeTabby(
+  renderTagsOrHide('sec_tabby','tabby', computeTabby(
     document.getElementById('pa_tabby').value,
     document.getElementById('pb_tabby').value
   ));
 
-  const rec=[
-    ...carriersOutcome('Chocolate'),
-    ...carriersOutcome('Cinnamon'),
-    ...carriersOutcome('Dilution')
-  ];
-  renderTags('recessifs', rec.filter(Boolean));
+  const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
+  const rec=[...carriersOutcome(ca.choco,cb.choco,'Chocolate'),
+             ...carriersOutcome(ca.cinn, cb.cinn, 'Cinnamon'),
+             ...carriersOutcome(ca.dil,  cb.dil,  'Dilution')];
+  renderTagsOrHide('sec_recessifs','recessifs', rec);
 
-  renderTags('roux', computeRouxExplicitFromBase());
+  renderTagsOrHide('sec_roux','roux', computeRouxExplicitFromBase());
 }
 
 /* ===== Boutons ===== */
@@ -514,7 +497,7 @@ document.getElementById('btn_reset').addEventListener('click', ()=>{
   document.getElementById('pa_base').value='seal'; document.getElementById('pb_base').value='seal';
   document.getElementById('pa_tabby').value='non'; document.getElementById('pb_tabby').value='non';
   document.getElementById('pa_motif').value=''; document.getElementById('pb_motif').value='';
-  ['motif','basecolors','tabby','recessifs','roux'].forEach(id=>document.getElementById(id).innerHTML='');
+  ['sec_patron','sec_couleurs','sec_tabby','sec_recessifs','sec_roux'].forEach(id=>document.getElementById(id).style.display='none');
   document.getElementById('formError').style.display='none';
   syncBaseToCarriers('pa'); syncBaseToCarriers('pb');
 });
