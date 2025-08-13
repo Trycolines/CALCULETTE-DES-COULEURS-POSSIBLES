@@ -19,7 +19,6 @@
   }
   html,body{margin:0;padding:0;background:var(--page-bg);color:var(--ink)}
   body{font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; line-height:1.5; font-size:15px}
-  /* Cadre général (tout entouré) */
   .frame{max-width:980px; margin:18px auto; background:var(--frame-bg);
     border:2px solid var(--frame-border); border-radius:16px; padding:14px;}
   .wrap{max-width:940px; margin:0 auto}
@@ -356,17 +355,41 @@ function computeBaseColors(){
   }));
   return [...tally.entries()].map(([c,p])=>({color:c,prob:round1(p*100)})).sort((a,b)=>b.prob-a.prob);
 }
-/* probabilité dd globale (pour Red->Cream) */
-function ddPercent(){
+
+/* ===== RÉPARTITIONS PRÉCISES SUR LES RÉCESSIFS ===== */
+// Dilution : renvoie % dd / % Dd / % DD (arrondis 0,1)
+function dilutionBreakdown(){
   const pa_base=document.getElementById('pa_base').value;
   const pb_base=document.getElementById('pb_base').value;
   const gA=baseToBDGenotype(pa_base), gB=baseToBDGenotype(pb_base);
   const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
   const DA=injectD(gA.D,ca), DB=injectD(gB.D,cb);
   const kidsD=cross(gametes(DA[0],DA[1]), gametes(DB[0],DB[1]));
-  let p=0; kidsD.forEach(([d,w])=>{ if(d[0]==='d'&&d[1]==='d') p+=w; });
-  return round1(p*100);
+  let dd=0, Dd=0, DD=0;
+  kidsD.forEach(([d,w])=>{
+    const set=new Set(d);
+    if(set.has('d') && set.size===1) dd+=w;      // dd
+    else if(set.has('d') && set.has('D')) Dd+=w; // Dd
+    else DD+=w;                                  // DD
+  });
+  return { dd:round1(dd*100), Dd:round1(Dd*100), DD:round1(DD*100) };
 }
+// Retourne, pour le locus B, la part "porteurs" d'un allèle cible ('b' ou 'bl')
+function bBreakdown(target){
+  const pa_base=document.getElementById('pa_base').value;
+  const pb_base=document.getElementById('pb_base').value;
+  const gA=baseToBDGenotype(pa_base), gB=baseToBDGenotype(pb_base);
+  const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
+  const BA=injectB(gA.B,ca), BB=injectB(gB.B,cb);
+  const kidsB=cross(gametes(BA[0],BA[1]), gametes(BB[0],BB[1]));
+  let carriers=0;
+  kidsB.forEach(([b,w])=>{ const s=new Set(b); if(s.has(target)) carriers+=w; });
+  const c=round1(carriers*100);
+  return { carriers:c, non:round1(100-c) };
+}
+
+/* probabilité dd globale (pour Red->Cream) */
+function ddPercent(){ return dilutionBreakdown().dd; }
 
 /* ===== Tabby ===== */
 function computeTabby(paTabby,pbTabby){
@@ -381,18 +404,20 @@ function computeTabby(paTabby,pbTabby){
   return out;
 }
 
-/* ===== Récessifs (porteurs seulement) ===== */
-// a = parent A porteur ?, b = parent B porteur ?
-function carriersOutcome(a, b, nom){
-  // Cas spécial Dilution : Dd × Dd => 25% dd / 50% Dd / 25% DD
-  if(nom === 'Dilution' && a && b){
-    return [{ txt: 'Dilution : ≈ 25% dilués / 50% porteurs / 25% non porteurs.' }];
+/* ===== Récessifs (porteurs — calculs réels) ===== */
+function carriersOutcome(nom){
+  if(nom==='Dilution'){
+    const br=dilutionBreakdown();
+    return [{ txt:`Dilution : ≈ ${br.dd}% dilués / ${br.Dd}% porteurs / ${br.DD}% non porteurs.` }];
   }
-  // Cas général : si au moins un parent porteur
-  if(a || b){
-    return [{ txt: `${nom} : ≈ 50% porteurs / 50% non porteurs.` }];
+  if(nom==='Chocolate'){
+    const br=bBreakdown('b');
+    return [{ txt:`Chocolate : ≈ ${br.carriers}% porteurs / ${br.non}% non porteurs.` }];
   }
-  // Sinon on n'affiche rien
+  if(nom==='Cinnamon'){
+    const br=bBreakdown('bl');
+    return [{ txt:`Cinnamon : ≈ ${br.carriers}% porteurs / ${br.non}% non porteurs.` }];
+  }
   return [];
 }
 
@@ -420,44 +445,37 @@ function splitTortie(totalTortie, pdd){
   if(tortie===0)      return `${creamT}% Cream-torties`;
   return `${tortie}% Torties / ${creamT}% Cream-torties`;
 }
-
-/* --- helper : distribue la part non-roux selon les couleurs de base calculées --- */
+/* helper : répartir les non-roux selon la distribution des bases */
 function formatNonRedLine(label, nonRedPct){
-  const dist = computeBaseColors(); // [{color:'Seal', prob:50}, {color:'Blue', prob:50}, ...]
+  const dist = computeBaseColors();
   if(nonRedPct <= 0.0001) return `${label} : 0%`;
   const parts = dist.map(d => `${round1(d.prob * nonRedPct / 100)}% ${d.color}`)
                     .filter(t => !/^0(\.0)?%/.test(t));
   return `${label} : ${parts.join(' / ')}`;
 }
-
-/* --- version corrigée qui affiche aussi les non-roux/non-rousses --- */
 function computeRouxExplicitFromBase(){
-  const m = maleOState();      // 'O' ou 'o'
-  const f = femaleOState();    // 'OO', 'Oo' ou 'oo'
-  const pdd = ddPercent();     // % dd global => Red -> Cream
+  const m = maleOState();
+  const f = femaleOState();
+  const pdd = ddPercent();
 
-  // Parts brutes (avant dilution) par sexe
   let malesRed=0, femalesRed=0, femalesTortie=0;
   if(m==='O' && f==='oo'){malesRed=100; femalesTortie=100;}
   else if(m==='O' && f==='Oo'){malesRed=100; femalesRed=50; femalesTortie=50;}
   else if(m==='O' && f==='OO'){malesRed=100; femalesRed=100;}
-  else if(m==='o' && f==='oo'){malesRed=0;   femalesRed=0;  femalesTortie=0;}
-  else if(m==='o' && f==='Oo'){malesRed=50;  femalesTortie=50;}
+  else if(m==='o' && f==='oo'){malesRed=0; femalesRed=0; femalesTortie=0;}
+  else if(m==='o' && f==='Oo'){malesRed=50; femalesTortie=50;}
   else if(m==='o' && f==='OO'){malesRed=100; femalesTortie=100;}
 
   const mNonRed = round1(100 - malesRed);
   const fNonRed = round1(100 - (femalesRed + femalesTortie));
 
-  const maleLine =
-    `${formatNonRedLine('Mâles non-roux', mNonRed)} — Roux : ${splitRed(malesRed, pdd)}`;
-
+  const maleLine = `${formatNonRedLine('Mâles non-roux', mNonRed)} — Roux : ${splitRed(malesRed, pdd)}`;
   const femaleBits = [];
   femaleBits.push(formatNonRedLine('Femelles non-rousses', fNonRed));
   if(femalesRed>0)    femaleBits.push(`Rousses : ${splitRed(femalesRed, pdd)}`);
   if(femalesTortie>0) femaleBits.push(`Torties : ${splitTortie(femalesTortie, pdd)}`);
-  const femaleLine = femaleBits.join(' — ');
 
-  return [{txt:maleLine},{txt:femaleLine}];
+  return [{txt:maleLine},{txt:femaleBits.join(' — ')}];
 }
 
 /* ===== Calcul global ===== */
@@ -479,10 +497,11 @@ function onCalculate(){
     document.getElementById('pb_tabby').value
   ));
 
-  const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
-  const rec=[...carriersOutcome(ca.choco,cb.choco,'Chocolate'),
-             ...carriersOutcome(ca.cinn, cb.cinn, 'Cinnamon'),
-             ...carriersOutcome(ca.dil,  cb.dil,  'Dilution')];
+  const rec=[
+    ...carriersOutcome('Chocolate'),
+    ...carriersOutcome('Cinnamon'),
+    ...carriersOutcome('Dilution')
+  ];
   renderTags('recessifs', rec.filter(Boolean));
 
   renderTags('roux', computeRouxExplicitFromBase());
