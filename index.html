@@ -8,27 +8,23 @@
 <style>
   :root{
     --page-bg:#ffffff;
-    --frame-bg:#FAF3F7;      /* rose très doux */
-    --frame-border:#D6B3E0;  /* lilac pastel */
+    --frame-bg:#FAF3F7;
+    --frame-border:#D6B3E0;
     --panel:#ffffff;
-    --border:#e9defc;        /* lilac clair interne */
-    --accent:#6b4ea3;        /* lilac soutenu */
-    --accent-2:#d37fb2;      /* rose accent */
+    --border:#e9defc;
+    --accent:#6b4ea3;
+    --accent-2:#d37fb2;
     --ink:#26233a; --muted:#6b6a75;
     --radius:14px;
   }
   html,body{margin:0;padding:0;background:var(--page-bg);color:var(--ink);-webkit-font-smoothing:antialiased}
-  /* Corps compact ~10 pt */
   body{font-family:"Fredoka",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; line-height:1.45; font-size:13.3px}
-  /* Cadre général */
   .frame{max-width:980px; margin:14px auto; background:var(--frame-bg);
     border:2px solid var(--frame-border); border-radius:16px; padding:12px;}
   .wrap{max-width:940px; margin:0 auto}
 
-  /* Panneaux */
   .panel{background:var(--panel); border:1px solid var(--border);
     border-radius:var(--radius); padding:10px; margin:8px 0;}
-  /* Titres ~12 pt, gras */
   .panel h2{font-size:16px; line-height:1.2; margin:0 0 6px; color:var(--accent-2); font-weight:700}
 
   .row{display:flex; gap:10px; align-items:flex-start; flex-wrap:wrap}
@@ -343,7 +339,6 @@ function applyDilution(base, d){
   if(base==='Cinnamon') return 'Fawn';
   return base;
 }
-/* injecte les porteurs (b / bl / d) dans les génotypes */
 function injectB(B,car){ let [x,y]=B;
   if(car.choco){ if(x==='B'&&y==='B') y='b'; }
   if(car.cinn){ if(x==='B'&&y==='B') y='bl'; else if(x==='b'&&y==='b') y='bl'; }
@@ -367,7 +362,6 @@ function computeBaseColors(){
   }));
   return [...tally.entries()].map(([c,p])=>({color:c,prob:round1(p*100)})).sort((a,b)=>b.prob-a.prob);
 }
-/* probabilité dd globale (pour Red->Cream) */
 function ddPercent(){
   const pa_base=document.getElementById('pa_base').value;
   const pb_base=document.getElementById('pb_base').value;
@@ -392,18 +386,16 @@ function computeTabby(paTabby,pbTabby){
   return out;
 }
 
-/* ===== Récessifs (porteurs seulement) ===== */
+/* ===== Récessifs (porteurs) — VERSION SIMPLIFIÉE ===== */
 function carriersOutcome(a, b, nom){
-  if(nom === 'Dilution' && a && b){
-    return [{ txt: 'Dilution : ≈ 25% dilués / 50% porteurs / 25% non porteurs.' }];
+  // Affiche seulement une mention "Possible porteur ..." si au moins un parent est porteur
+  if (a || b) {
+    return [{ txt: `Possible porteur ${nom.toLowerCase()}` }];
   }
-  if(a || b){
-    return [{ txt: `${nom} : ≈ 50% porteurs / 50% non porteurs.` }];
-  }
-  return []; // rien d’affiché si impossible
+  return [];
 }
 
-/* ===== Gène O : Red/Cream & Torties (split par dd) ===== */
+/* ===== Gène O : Red/Cream & Torties ===== */
 function maleOState(){ const b=document.getElementById('pa_base').value; return (b==='red'||b==='cream') ? 'O' : 'o'; }
 function femaleOState(){
   const b=document.getElementById('pb_base').value;
@@ -428,9 +420,9 @@ function splitTortie(totalTortie, pdd){
   return `${tortie}% Torties / ${creamT}% Cream-torties`;
 }
 function computeRouxExplicitFromBase(){
-  const m = maleOState();   // 'O' ou 'o'
-  const f = femaleOState(); // 'OO', 'Oo' ou 'oo'
-  const pdd = ddPercent();  // % dd global => Red -> Cream
+  const m = maleOState();
+  const f = femaleOState();
+  const pdd = ddPercent();
 
   let malesRed=0, femalesRed=0, femalesTortie=0;
   if(m==='O' && f==='oo'){malesRed=100; femalesTortie=100;}
@@ -473,9 +465,9 @@ function onCalculate(){
   renderTags('tabby', tabby); showOrHide('sec_tabby', tabby);
 
   const ca=carriersFromUI('pa'), cb=carriersFromUI('pb');
-  const rec=[...carriersOutcome(ca.choco,cb.choco,'Chocolate'),
-             ...carriersOutcome(ca.cinn, cb.cinn, 'Cinnamon'),
-             ...carriersOutcome(ca.dil,  cb.dil,  'Dilution')];
+  const rec=[...carriersOutcome(ca.choco,cb.choco,'chocolate'),
+             ...carriersOutcome(ca.cinn, cb.cinn, 'cinnamon'),
+             ...carriersOutcome(ca.dil,  cb.dil,  'dilution')];
   renderTags('recessifs', rec); showOrHide('sec_recessifs', rec);
 
   const roux=computeRouxExplicitFromBase();
